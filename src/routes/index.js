@@ -1,0 +1,108 @@
+// ============================================================================
+//  Router principal de la API REST.  Monta el CRUD de cada recurso y agrega
+//  los endpoints especificos (consultas, geolocalizacion, redes sociales).
+// ============================================================================
+import { Router } from 'express';
+import crudRouter from './crud.js';
+
+import Continente from '../models/Continente.js';
+import Seleccion from '../models/Seleccion.js';
+import Grupo from '../models/Grupo.js';
+import Estadio from '../models/Estadio.js';
+import Partido from '../models/Partido.js';
+import Clasificacion from '../models/Clasificacion.js';
+import FaseFinal from '../models/FaseFinal.js';
+import Usuario from '../models/Usuario.js';
+import Boleto from '../models/Boleto.js';
+
+import ClasificacionService from '../services/ClasificacionService.js';
+import FaseFinalService from '../services/FaseFinalService.js';
+import EstadisticasService from '../services/EstadisticasService.js';
+import CompartirService from '../services/CompartirService.js';
+
+const api = Router();
+const wrap = (fn) => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
+
+// --------------------------------------------------------------------------
+//  CONTINENTES
+// --------------------------------------------------------------------------
+api.get('/continentes/paises', wrap(async (req, res) => res.json(await Continente.paisesPorConfederacion())));
+api.use('/continentes', crudRouter(Continente, { orden: 'id_continente' }));
+
+// --------------------------------------------------------------------------
+//  SELECCIONES
+// --------------------------------------------------------------------------
+api.get('/selecciones/detalle', wrap(async (req, res) => res.json(await Seleccion.conContinente())));
+api.get('/selecciones/ranking/top', wrap(async (req, res) =>
+  res.json(await Seleccion.mejoresRankeados(Number(req.query.limite) || 10))));
+api.use('/selecciones', crudRouter(Seleccion));
+
+// --------------------------------------------------------------------------
+//  GRUPOS  (+ clasificacion, asignacion de selecciones)
+// --------------------------------------------------------------------------
+api.get('/grupos/:id/clasificacion', wrap(async (req, res) => res.json(await Grupo.clasificacion(req.params.id))));
+api.get('/grupos/:id/clasificacion-calc', wrap(async (req, res) =>
+  res.json(await ClasificacionService.calcularGrupo(req.params.id))));
+api.get('/grupos/:id/selecciones', wrap(async (req, res) => res.json(await Grupo.selecciones(req.params.id))));
+api.post('/grupos/:id/asignar', wrap(async (req, res) =>
+  res.status(201).json(await Grupo.asignarSeleccion(req.params.id, req.body.id_seleccion))));
+api.use('/grupos', crudRouter(Grupo));
+
+// --------------------------------------------------------------------------
+//  ESTADIOS
+// --------------------------------------------------------------------------
+api.get('/estadios/capacidad', wrap(async (req, res) => res.json(await Estadio.porCapacidad())));
+api.get('/estadios/:id/partidos', wrap(async (req, res) => res.json(await Estadio.partidos(req.params.id))));
+api.use('/estadios', crudRouter(Estadio));
+
+// --------------------------------------------------------------------------
+//  PARTIDOS  (+ registrar resultado -> recalcula clasificacion por trigger)
+// --------------------------------------------------------------------------
+api.get('/partidos/detalle', wrap(async (req, res) => res.json(await Partido.detallados(req.query.fase))));
+api.put('/partidos/:id/resultado', wrap(async (req, res) => {
+  const { goles_local, goles_visitante } = req.body;
+  const p = await Partido.registrarResultado(req.params.id, goles_local, goles_visitante);
+  if (!p) return res.status(404).json({ error: 'Partido no encontrado' });
+  res.json(p);
+}));
+api.use('/partidos', crudRouter(Partido));
+
+// --------------------------------------------------------------------------
+//  CLASIFICACIONES
+// --------------------------------------------------------------------------
+api.get('/clasificaciones', wrap(async (req, res) => res.json(await Clasificacion.general())));
+api.get('/clasificaciones/clasificados', wrap(async (req, res) => res.json(await Clasificacion.clasificados())));
+
+// --------------------------------------------------------------------------
+//  FASE FINAL  (asignacion automatica de sedes)
+// --------------------------------------------------------------------------
+api.post('/fase-final/generar', wrap(async (req, res) => res.json(await FaseFinalService.generar())));
+api.get('/fase-final', wrap(async (req, res) => res.json(await FaseFinal.cuadro())));
+
+// --------------------------------------------------------------------------
+//  USUARIOS y BOLETOS
+// --------------------------------------------------------------------------
+api.get('/usuarios/:id/boletos', wrap(async (req, res) => res.json(await Usuario.boletos(req.params.id))));
+api.use('/usuarios', crudRouter(Usuario));
+api.get('/boletos/detalle', wrap(async (req, res) => res.json(await Boleto.detallados())));
+api.use('/boletos', crudRouter(Boleto));
+
+// --------------------------------------------------------------------------
+//  ESTADISTICAS
+// --------------------------------------------------------------------------
+api.get('/estadisticas/resumen', wrap(async (req, res) => res.json(await EstadisticasService.resumen())));
+api.get('/estadisticas/goleadores', wrap(async (req, res) => res.json(await EstadisticasService.maximosGoleadores())));
+api.get('/estadisticas/defensas', wrap(async (req, res) => res.json(await EstadisticasService.mejoresDefensas())));
+api.get('/estadisticas/partidos-goleados', wrap(async (req, res) => res.json(await EstadisticasService.partidosMasGoleados())));
+api.get('/estadisticas/confederaciones', wrap(async (req, res) => res.json(await EstadisticasService.porConfederacion())));
+
+// --------------------------------------------------------------------------
+//  COMPARTIR EN REDES SOCIALES
+// --------------------------------------------------------------------------
+api.get('/compartir/grupo/:id', wrap(async (req, res) => res.json(await CompartirService.grupo(req.params.id))));
+api.get('/compartir/clasificacion', wrap(async (req, res) => res.json(await CompartirService.clasificacion())));
+api.get('/compartir/estadio/:id', wrap(async (req, res) => res.json(await CompartirService.estadio(req.params.id))));
+api.get('/compartir/ruta', wrap(async (req, res) =>
+  res.json(await CompartirService.ruta(req.query.lat, req.query.lon, req.query.estadio))));
+
+export default api;

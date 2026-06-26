@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: mundial2026_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: mundial2026
+      POSTGRES_USER: mundial
+      POSTGRES_PASSWORD: mundial2026
+    ports:
+      # Puerto del host 55432 para evitar conflicto con PostgreSQL nativos en 5432-5434
+      - "55432:5432"
+    volumes:
+      - mundial_pgdata:/var/lib/postgresql/data
+      # Scripts de inicializacion (se ejecutan en orden alfabetico solo la 1a vez)
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./db/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mundial -d mundial2026"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  mundial_pgdata:

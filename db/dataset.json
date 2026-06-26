@@ -1,0 +1,857 @@
+{
+  "generado": "Mundial 2026 real al 25/06/2026",
+  "confederaciones": [
+    {
+      "confederacion": "CONCACAF",
+      "continente": "America del Norte",
+      "equipos": [
+        {
+          "nombre": "Mexico",
+          "pais": "Mexico",
+          "capital": "Ciudad de Mexico",
+          "latitud": 19.4326,
+          "longitud": -99.1332,
+          "ranking_fifa": 14,
+          "historia": "Mexico es la potencia historica de la CONCACAF y uno de los participantes mas constantes de los mundiales. Alcanzo los cuartos de final en 1970 y 1986, ambos como anfitrion, su mejor resultado historico. En 2026 vuelve a ser sede mundialista por tercera vez.",
+          "ventajas": "Gran experiencia mundialista, aficion extremadamente solida y plantel competitivo con jugadores en ligas europeas.",
+          "desventajas": "Recurrente incapacidad para superar los octavos de final, la llamada maldicion del quinto partido.",
+          "bandera": "🇲🇽"
+        },
+        {
+          "nombre": "Canada",
+          "pais": "Canada",
+          "capital": "Ottawa",
+          "latitud": 45.4215,
+          "longitud": -75.6972,
+          "ranking_fifa": 30,
+          "historia": "Canada disputo su primer Mundial en 1986 sin anotar goles y volvio a la cita tras 36 anos en 2022. Ha crecido enormemente impulsado por figuras como Alphonso Davies y Jonathan David. En 2026 sera anfitrion por primera vez en su historia.",
+          "ventajas": "Velocidad y dinamismo ofensivo con figuras de talla mundial y proyeccion en ascenso.",
+          "desventajas": "Poca profundidad de plantel y limitada experiencia en fases finales mundialistas.",
+          "bandera": "🇨🇦"
+        },
+        {
+          "nombre": "Haiti",
+          "pais": "Haiti",
+          "capital": "Puerto Principe",
+          "latitud": 18.5944,
+          "longitud": -72.3074,
+          "ranking_fifa": 86,
+          "historia": "Haiti disputo su unico Mundial en Alemania 1974. Es una de las selecciones historicas del Caribe que regresa a la maxima cita pese a sus dificultades.",
+          "ventajas": "Talento individual y velocidad en ataque.",
+          "desventajas": "Falta de recursos e infraestructura futbolistica.",
+          "bandera": "🇭🇹"
+        },
+        {
+          "nombre": "Estados Unidos",
+          "pais": "Estados Unidos",
+          "capital": "Washington D. C.",
+          "latitud": 38.9072,
+          "longitud": -77.0369,
+          "ranking_fifa": 17,
+          "historia": "Estados Unidos fue semifinalista en el primer Mundial de 1930 y resurgio como potencia regional tras organizar el torneo de 1994. Llego a cuartos de final en 2002, su mejor actuacion moderna. Coorganiza el Mundial 2026 con una generacion joven y talentosa.",
+          "ventajas": "Generacion joven con muchos jugadores en clubes europeos de primer nivel y condicion de local.",
+          "desventajas": "Inconsistencia ante rivales fuertes y falta de un goleador de elite consolidado.",
+          "bandera": "🇺🇸"
+        },
+        {
+          "nombre": "Curazao",
+          "pais": "Curazao",
+          "capital": "Willemstad",
+          "latitud": 12.1084,
+          "longitud": -68.9335,
+          "ranking_fifa": 82,
+          "historia": "Pequena isla del Caribe, Curazao gano la Copa del Caribe 2017 y vive una clasificacion historica aprovechando jugadores de origen neerlandes.",
+          "ventajas": "Jugadores formados en ligas europeas.",
+          "desventajas": "Escasa poblacion y nula experiencia mundialista.",
+          "bandera": "🇨🇼"
+        },
+        {
+          "nombre": "Panama",
+          "pais": "Panama",
+          "capital": "Ciudad de Panama",
+          "latitud": 8.9824,
+          "longitud": -79.5199,
+          "ranking_fifa": 34,
+          "historia": "Panama vivio un hito historico al clasificar por primera vez a un Mundial en Rusia 2018. Aunque cayo en la fase de grupos, anoto sus primeros goles mundialistas. Desde entonces se ha consolidado como un rival exigente en la CONCACAF.",
+          "ventajas": "Intensidad fisica, garra competitiva y un bloque defensivo aguerrido.",
+          "desventajas": "Falta de jerarquia ofensiva ante selecciones de mayor nivel.",
+          "bandera": "🇵🇦"
+        }
+      ]
+    },
+    {
+      "confederacion": "CAF",
+      "continente": "Africa",
+      "equipos": [
+        {
+          "nombre": "Sudafrica",
+          "pais": "Sudafrica",
+          "capital": "Pretoria",
+          "latitud": -25.7479,
+          "longitud": 28.2293,
+          "ranking_fifa": 56,
+          "historia": "Sudafrica organizo el Mundial de 2010, el primero en suelo africano. Gano la Copa Africana de Naciones en 1996 como anfitriona. Los Bafana Bafana regresan a la elite mundial.",
+          "ventajas": "Velocidad, juego colectivo dinamico y buen estado fisico.",
+          "desventajas": "Irregularidad y poca experiencia mundialista reciente.",
+          "bandera": "🇿🇦"
+        },
+        {
+          "nombre": "Marruecos",
+          "pais": "Marruecos",
+          "capital": "Rabat",
+          "latitud": 34.0209,
+          "longitud": -6.8417,
+          "ranking_fifa": 7,
+          "historia": "Marruecos hizo historia en Catar 2022 al convertirse en la primera seleccion africana en alcanzar las semifinales de un Mundial. Debutaron en 1970 y en 1986 fueron el primer pais africano en superar la fase de grupos. Son hoy el referente del futbol del continente.",
+          "ventajas": "Defensa solida y bloque compacto con jugadores de elite europea como Hakimi y Amrabat.",
+          "desventajas": "Dependen mucho de su solidez defensiva y a veces les falta contundencia en ataque.",
+          "bandera": "🇲🇦"
+        },
+        {
+          "nombre": "Costa de Marfil",
+          "pais": "Costa de Marfil",
+          "capital": "Yamusukro",
+          "latitud": 6.8276,
+          "longitud": -5.2893,
+          "ranking_fifa": 33,
+          "historia": "Costa de Marfil vivio su epoca dorada con la generacion de Drogba, clasificando a tres Mundiales consecutivos. Conquistaron la Copa Africana de Naciones en 1992, 2015 y como anfitriones en 2024. Mantienen una camada talentosa de jugadores en Europa.",
+          "ventajas": "Plantel equilibrado y campeon continental vigente con confianza renovada.",
+          "desventajas": "Historial de bajo rendimiento en fases de grupos mundialistas.",
+          "bandera": "🇨🇮"
+        },
+        {
+          "nombre": "Tunez",
+          "pais": "Tunez",
+          "capital": "Tunez",
+          "latitud": 36.8065,
+          "longitud": 10.1815,
+          "ranking_fifa": 50,
+          "historia": "Tunez fue el primer pais africano en ganar un partido en un Mundial, en 1978 ante Mexico. Conquistaron la Copa Africana de Naciones en 2004 como anfitriones. En Catar 2022 vencieron a la campeona Francia en fase de grupos.",
+          "ventajas": "Orden tactico y disciplina defensiva muy consolidada.",
+          "desventajas": "Escasa capacidad goleadora que les impide superar la fase de grupos.",
+          "bandera": "🇹🇳"
+        },
+        {
+          "nombre": "Egipto",
+          "pais": "Egipto",
+          "capital": "El Cairo",
+          "latitud": 30.0444,
+          "longitud": 31.2357,
+          "ranking_fifa": 29,
+          "historia": "Egipto es la seleccion mas laureada de la Copa Africana de Naciones con siete titulos. Disputaron su primer Mundial en 1934, siendo pioneros africanos en el torneo. Han dependido en gran medida del talento de Mohamed Salah en la ultima decada.",
+          "ventajas": "Cuentan con Mohamed Salah, uno de los mejores delanteros del mundo.",
+          "desventajas": "Excesiva dependencia de Salah y poca regularidad para clasificar a Mundiales.",
+          "bandera": "🇪🇬"
+        },
+        {
+          "nombre": "Cabo Verde",
+          "pais": "Cabo Verde",
+          "capital": "Praia",
+          "latitud": 14.9215,
+          "longitud": -23.5087,
+          "ranking_fifa": 70,
+          "historia": "Los Tiburones Azules son una de las grandes sorpresas del futbol africano, con un crecimiento notable en el ranking FIFA y una clasificacion historica.",
+          "ventajas": "Cohesion grupal y crecimiento sostenido.",
+          "desventajas": "Plantel limitado por el tamano del pais.",
+          "bandera": "🇨🇻"
+        },
+        {
+          "nombre": "Senegal",
+          "pais": "Senegal",
+          "capital": "Dakar",
+          "latitud": 14.6928,
+          "longitud": -17.4467,
+          "ranking_fifa": 15,
+          "historia": "Senegal sorprendio al mundo en su debut en 2002 llegando a cuartos de final tras vencer a Francia. Conquistaron la Copa Africana de Naciones en 2021, su primer titulo continental. Se han consolidado como una de las potencias estables de Africa.",
+          "ventajas": "Plantel fisicamente potente y profundo con figuras como Sadio Mane y Koulibaly.",
+          "desventajas": "Irregularidad en momentos clave y exceso de confianza ante rivales menores.",
+          "bandera": "🇸🇳"
+        },
+        {
+          "nombre": "Argelia",
+          "pais": "Argelia",
+          "capital": "Argel",
+          "latitud": 36.7538,
+          "longitud": 3.0588,
+          "ranking_fifa": 28,
+          "historia": "Argelia protagonizo el famoso partido ante Alemania Occidental en 1982 y alcanzo los octavos de final en Brasil 2014. Fueron campeones de Africa en 1990 y 2019. Cuentan con una generacion talentosa formada en ligas europeas.",
+          "ventajas": "Medio campo creativo y jugadores tecnicos con experiencia europea.",
+          "desventajas": "Fragilidad mental y baja productividad tras su titulo continental de 2019.",
+          "bandera": "🇩🇿"
+        },
+        {
+          "nombre": "Republica Democratica del Congo",
+          "pais": "Republica Democratica del Congo",
+          "capital": "Kinshasa",
+          "latitud": -4.4419,
+          "longitud": 15.2663,
+          "ranking_fifa": 57,
+          "historia": "La RD Congo (como Zaire) gano dos Copas Africanas (1968 y 1974) y disputo el Mundial de 1974. Es una cantera de gran talento fisico que resurge en Africa.",
+          "ventajas": "Potencia fisica y talento individual.",
+          "desventajas": "Inestabilidad institucional y federativa.",
+          "bandera": "🇨🇩"
+        },
+        {
+          "nombre": "Ghana",
+          "pais": "Ghana",
+          "capital": "Accra",
+          "latitud": 5.6037,
+          "longitud": -0.187,
+          "ranking_fifa": 73,
+          "historia": "Las Estrellas Negras llegaron a cuartos en Sudafrica 2010, rozando la semifinal, y han ganado cuatro Copas Africanas. Son una seleccion muy respetada del continente.",
+          "ventajas": "Fisico, juventud y tradicion mundialista.",
+          "desventajas": "Inconsistencia y conflictos internos recurrentes.",
+          "bandera": "🇬🇭"
+        }
+      ]
+    },
+    {
+      "confederacion": "AFC",
+      "continente": "Asia",
+      "equipos": [
+        {
+          "nombre": "Corea del Sur",
+          "pais": "Corea del Sur",
+          "capital": "Seul",
+          "latitud": 37.5665,
+          "longitud": 126.978,
+          "ranking_fifa": 23,
+          "historia": "Corea del Sur es el equipo asiatico con mas participaciones mundialistas y alcanzo las semifinales como anfitrion en 2002, su mejor resultado historico. Clasifica a los Mundiales de manera regular desde 1986. Liderada por figuras como Son Heung-min, mantiene un nivel competitivo constante.",
+          "ventajas": "Intensidad fisica, gran capacidad de presion y el talento individual de Son Heung-min.",
+          "desventajas": "Defensa vulnerable ante rivales tecnicos y dependencia excesiva de sus estrellas.",
+          "bandera": "🇰🇷"
+        },
+        {
+          "nombre": "Catar",
+          "pais": "Catar",
+          "capital": "Doha",
+          "latitud": 25.2854,
+          "longitud": 51.531,
+          "ranking_fifa": 36,
+          "historia": "Catar fue anfitrion del Mundial 2022 y es el vigente bicampeon de la Copa Asiatica (2019 y 2023). Aunque su debut mundialista fue discreto, ha invertido fuertemente en su desarrollo futbolistico. Es una de las selecciones emergentes mas fuertes del continente.",
+          "ventajas": "Generacion talentosa y campeona continental con buen toque y movilidad.",
+          "desventajas": "Escasa experiencia ganadora a nivel mundial y bajo rendimiento ante selecciones de elite.",
+          "bandera": "🇶🇦"
+        },
+        {
+          "nombre": "Australia",
+          "pais": "Australia",
+          "capital": "Canberra",
+          "latitud": -35.2809,
+          "longitud": 149.13,
+          "ranking_fifa": 25,
+          "historia": "Australia se integro a la AFC en 2006 y desde entonces es habitual en los Mundiales. En 2022 alcanzo los octavos de final tras una destacada fase de grupos. Los Socceroos combinan fisico europeo con experiencia internacional.",
+          "ventajas": "Fortaleza fisica, gran mentalidad competitiva y juego aereo dominante.",
+          "desventajas": "Plantilla con poca profundidad de talento de primer nivel y limitaciones tecnicas.",
+          "bandera": "🇦🇺"
+        },
+        {
+          "nombre": "Japon",
+          "pais": "Japon",
+          "capital": "Tokio",
+          "latitud": 35.6762,
+          "longitud": 139.6503,
+          "ranking_fifa": 17,
+          "historia": "Japon disputa Mundiales de forma ininterrumpida desde 1998 y ha alcanzado los octavos de final en cuatro ediciones. En Catar 2022 sorprendio al vencer a Alemania y Espana en la fase de grupos. Es considerada la potencia futbolistica mas consistente de Asia.",
+          "ventajas": "Juego colectivo muy organizado, ritmo alto y un bloque de jugadores formados en las mejores ligas europeas.",
+          "desventajas": "Falta de un goleador de elite y dificultad historica para superar la barrera de los octavos de final.",
+          "bandera": "🇯🇵"
+        },
+        {
+          "nombre": "Iran",
+          "pais": "Iran",
+          "capital": "Teheran",
+          "latitud": 35.6892,
+          "longitud": 51.389,
+          "ranking_fifa": 20,
+          "historia": "Iran es una de las selecciones mas dominantes de Asia y suele clasificar con holgura a las eliminatorias finales. Ha participado en multiples Mundiales aunque nunca ha superado la fase de grupos. Cuenta con jugadores destacados en ligas europeas.",
+          "ventajas": "Solidez defensiva y orden tactico que la convierten en un rival muy dificil de batir.",
+          "desventajas": "Limitada creatividad ofensiva y poca pegada en momentos decisivos.",
+          "bandera": "🇮🇷"
+        },
+        {
+          "nombre": "Arabia Saudita",
+          "pais": "Arabia Saudita",
+          "capital": "Riad",
+          "latitud": 24.7136,
+          "longitud": 46.6753,
+          "ranking_fifa": 58,
+          "historia": "Arabia Saudita es una potencia tradicional del futbol asiatico con varias participaciones mundialistas. En Catar 2022 protagonizo una de las mayores sorpresas al vencer a la Argentina campeona. Su liga local ha crecido enormemente atrayendo a estrellas mundiales.",
+          "ventajas": "Equipo veloz y atrevido, capaz de dar grandes golpes ante favoritos.",
+          "desventajas": "Inconsistencia y fragilidad defensiva que suele costarle goleadas.",
+          "bandera": "🇸🇦"
+        },
+        {
+          "nombre": "Iraq",
+          "pais": "Iraq",
+          "capital": "Bagdad",
+          "latitud": 33.3152,
+          "longitud": 44.3661,
+          "ranking_fifa": 56,
+          "historia": "Iraq fue campeon de la Copa Asiatica en 2007 en una gesta emotiva tras anos de conflicto. Pese a las dificultades para jugar de local, mantiene una base solida de talento. Pelea por regresar a un Mundial tras su unica participacion en 1986.",
+          "ventajas": "Caracter combativo y jugadores tecnicos con creciente proyeccion internacional.",
+          "desventajas": "Inestabilidad institucional y falta de continuidad en sus procesos deportivos.",
+          "bandera": "🇮🇶"
+        },
+        {
+          "nombre": "Jordania",
+          "pais": "Jordania",
+          "capital": "Aman",
+          "latitud": 31.9539,
+          "longitud": 35.9106,
+          "ranking_fifa": 62,
+          "historia": "Jordania alcanzo la final de la Copa Asiatica 2023, su mejor resultado historico, y debuta en una Copa del Mundo con gran ambicion.",
+          "ventajas": "Orden defensivo y juego directo.",
+          "desventajas": "Poca experiencia ante potencias mundiales.",
+          "bandera": "🇯🇴"
+        },
+        {
+          "nombre": "Uzbekistan",
+          "pais": "Uzbekistan",
+          "capital": "Tashkent",
+          "latitud": 41.2995,
+          "longitud": 69.2401,
+          "ranking_fifa": 57,
+          "historia": "Uzbekistan logro su clasificacion historica al primer Mundial de su historia rumbo a 2026, un hito para el pais. Durante anos estuvo cerca de clasificar pero quedaba eliminado en repechajes. Su generacion actual es la mas talentosa que ha producido.",
+          "ventajas": "Juventud, hambre competitiva y un bloque cohesionado que crecio juntos.",
+          "desventajas": "Falta total de experiencia mundialista y poca jerarquia ante grandes rivales.",
+          "bandera": "🇺🇿"
+        }
+      ]
+    },
+    {
+      "confederacion": "UEFA",
+      "continente": "Europa",
+      "equipos": [
+        {
+          "nombre": "Republica Checa",
+          "pais": "Republica Checa",
+          "capital": "Praga",
+          "latitud": 50.0755,
+          "longitud": 14.4378,
+          "ranking_fifa": 40,
+          "historia": "Heredera de la escuela checoslovaca, fue subcampeona de la Eurocopa 1996 y semifinalista mundialista en 1934 y 1962. Mantiene una solida tradicion en Europa central.",
+          "ventajas": "Orden tactico y buena tecnica individual.",
+          "desventajas": "Generacion en transicion sin grandes estrellas.",
+          "bandera": "🇨🇿"
+        },
+        {
+          "nombre": "Suiza",
+          "pais": "Suiza",
+          "capital": "Berna",
+          "latitud": 46.948,
+          "longitud": 7.4474,
+          "ranking_fifa": 19,
+          "historia": "Suiza es una participante habitual de los Mundiales, alcanzando octavos en 2014, 2018 y 2022. Llego a cuartos en la Eurocopa 2020 y 2024. Destaca por su solidez y regularidad.",
+          "ventajas": "Equipo ordenado, disciplinado y dificil de batir.",
+          "desventajas": "Le falta jerarquia ofensiva para pelear titulos.",
+          "bandera": "🇨🇭"
+        },
+        {
+          "nombre": "Bosnia y Herzegovina",
+          "pais": "Bosnia y Herzegovina",
+          "capital": "Sarajevo",
+          "latitud": 43.8563,
+          "longitud": 18.4131,
+          "ranking_fifa": 74,
+          "historia": "Debuto en el Mundial de Brasil 2014 con figuras como Edin Dzeko. Es una seleccion competitiva del sureste europeo que vuelve a la cita mundialista.",
+          "ventajas": "Poder ofensivo y caracter competitivo.",
+          "desventajas": "Defensa vulnerable y poca profundidad de plantel.",
+          "bandera": "🇧🇦"
+        },
+        {
+          "nombre": "Escocia",
+          "pais": "Escocia",
+          "capital": "Edimburgo",
+          "latitud": 55.9533,
+          "longitud": -3.1883,
+          "ranking_fifa": 39,
+          "historia": "Escocia es pionera del futbol y disputo varios Mundiales entre 1954 y 1998. No supera la fase de grupos en su historia mundialista. Resurgio clasificando a las Eurocopas 2020 y 2024.",
+          "ventajas": "Espiritu combativo y solido funcionamiento colectivo.",
+          "desventajas": "Limitado talento individual frente a las grandes potencias.",
+          "bandera": "🏴󠁧󠁢󠁳󠁣󠁴󠁿"
+        },
+        {
+          "nombre": "Turquia",
+          "pais": "Turquia",
+          "capital": "Ankara",
+          "latitud": 39.9334,
+          "longitud": 32.8597,
+          "ranking_fifa": 26,
+          "historia": "Turquia logro un historico tercer puesto en el Mundial 2002. Llego a cuartos en la Eurocopa 2024 con una generacion prometedora. Es un equipo con creciente proyeccion.",
+          "ventajas": "Juventud talentosa y gran ambiente de aficion.",
+          "desventajas": "Inconsistencia y falta de regularidad en torneos largos.",
+          "bandera": "🇹🇷"
+        },
+        {
+          "nombre": "Alemania",
+          "pais": "Alemania",
+          "capital": "Berlin",
+          "latitud": 52.52,
+          "longitud": 13.405,
+          "ranking_fifa": 9,
+          "historia": "Alemania es tetracampeona del mundo (1954, 1974, 1990 y 2014). Es una de las selecciones mas exitosas de la historia. Tras fracasos en 2018 y 2022 busca recuperar su jerarquia.",
+          "ventajas": "Mentalidad competitiva y estructura tactica solida.",
+          "desventajas": "Reconstruccion en marcha tras dos Mundiales decepcionantes.",
+          "bandera": "🇩🇪"
+        },
+        {
+          "nombre": "Paises Bajos",
+          "pais": "Paises Bajos",
+          "capital": "Amsterdam",
+          "latitud": 52.3676,
+          "longitud": 4.9041,
+          "ranking_fifa": 7,
+          "historia": "Paises Bajos fue subcampeona del mundo en 1974, 1978 y 2010. Es famosa por el 'futbol total'. Pese a su gran historia, nunca ha levantado la Copa del Mundo.",
+          "ventajas": "Estilo ofensivo y solida defensa con jugadores de top.",
+          "desventajas": "Inconsistencia y falta de un cierre de torneos ganador.",
+          "bandera": "🇳🇱"
+        },
+        {
+          "nombre": "Suecia",
+          "pais": "Suecia",
+          "capital": "Estocolmo",
+          "latitud": 59.3293,
+          "longitud": 18.0686,
+          "ranking_fifa": 27,
+          "historia": "Suecia fue subcampeona del mundo en 1958 como anfitriona y tercera en 1950 y 1994. Es una potencia tradicional del futbol nordico que llego a cuartos en 2018.",
+          "ventajas": "Fortaleza fisica y solidez defensiva.",
+          "desventajas": "Dependencia de transiciones y poca posesion.",
+          "bandera": "🇸🇪"
+        },
+        {
+          "nombre": "Belgica",
+          "pais": "Belgica",
+          "capital": "Bruselas",
+          "latitud": 50.8503,
+          "longitud": 4.3517,
+          "ranking_fifa": 8,
+          "historia": "Belgica vivio su mejor epoca con la 'generacion dorada', logrando el tercer puesto en el Mundial 2018. Nunca ha conquistado un titulo mayor. Atraviesa una transicion generacional.",
+          "ventajas": "Jugadores tecnicos con experiencia en grandes ligas.",
+          "desventajas": "El recambio aun no iguala a la generacion anterior.",
+          "bandera": "🇧🇪"
+        },
+        {
+          "nombre": "Espana",
+          "pais": "Espana",
+          "capital": "Madrid",
+          "latitud": 40.4168,
+          "longitud": -3.7038,
+          "ranking_fifa": 3,
+          "historia": "Espana fue campeona del mundo en 2010 en Sudafrica, su unico titulo mundialista. Domino el futbol entre 2008 y 2012 con dos Eurocopas. Reciente campeona de la Eurocopa 2024.",
+          "ventajas": "Posesion dominante y un mediocampo creativo de elite.",
+          "desventajas": "A veces le falta contundencia y un goleador nato.",
+          "bandera": "🇪🇸"
+        },
+        {
+          "nombre": "Francia",
+          "pais": "Francia",
+          "capital": "Paris",
+          "latitud": 48.8566,
+          "longitud": 2.3522,
+          "ranking_fifa": 2,
+          "historia": "Francia conquisto la Copa del Mundo en 1998 como anfitriona y en 2018 en Rusia. Finalista en 2022 cayendo ante Argentina en penales. Es una de las potencias dominantes del futbol moderno.",
+          "ventajas": "Plantilla profunda con talento de clase mundial en todas las lineas.",
+          "desventajas": "Tensiones internas y exceso de confianza pueden afectar al grupo.",
+          "bandera": "🇫🇷"
+        },
+        {
+          "nombre": "Noruega",
+          "pais": "Noruega",
+          "capital": "Oslo",
+          "latitud": 59.9139,
+          "longitud": 10.7522,
+          "ranking_fifa": 33,
+          "historia": "Noruega participo en los Mundiales de 1994 y 1998, alcanzando octavos. Tras anos de ausencia, resurge con una generacion liderada por estrellas mundiales. Busca volver a una cita mundialista.",
+          "ventajas": "Poder ofensivo con figuras de talla mundial.",
+          "desventajas": "Poca experiencia reciente en fases finales de Mundial.",
+          "bandera": "🇳🇴"
+        },
+        {
+          "nombre": "Austria",
+          "pais": "Austria",
+          "capital": "Viena",
+          "latitud": 48.2082,
+          "longitud": 16.3738,
+          "ranking_fifa": 22,
+          "historia": "Austria tuvo su epoca dorada en los anos 30 con el 'Wunderteam', logrando el cuarto puesto en 1934. En la era moderna ha vuelto a ser competitiva. Hizo buen papel en la Euro 2024.",
+          "ventajas": "Intensidad y presion alta bajo esquemas modernos.",
+          "desventajas": "Falta de experiencia en grandes citas mundialistas recientes.",
+          "bandera": "🇦🇹"
+        },
+        {
+          "nombre": "Portugal",
+          "pais": "Portugal",
+          "capital": "Lisboa",
+          "latitud": 38.7223,
+          "longitud": -9.1393,
+          "ranking_fifa": 6,
+          "historia": "Portugal gano la Eurocopa 2016 y la Liga de Naciones 2019 y 2025. Nunca ha sido campeona del mundo pese a generaciones doradas. Llego a semifinales del Mundial en 1966 y 2006.",
+          "ventajas": "Talento ofensivo abundante y experiencia ganadora.",
+          "desventajas": "Dependencia historica de figuras veteranas.",
+          "bandera": "🇵🇹"
+        },
+        {
+          "nombre": "Inglaterra",
+          "pais": "Inglaterra",
+          "capital": "Londres",
+          "latitud": 51.5074,
+          "longitud": -0.1278,
+          "ranking_fifa": 4,
+          "historia": "Inglaterra gano su unico Mundial en 1966 como local. Ha sido constante en fases finales recientes, con semifinal en 2018 y cuartos en 2022. Sufre una larga sequia de titulos.",
+          "ventajas": "Generacion joven y talentosa con gran ataque.",
+          "desventajas": "Historico bloqueo mental en instancias decisivas.",
+          "bandera": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
+        },
+        {
+          "nombre": "Croacia",
+          "pais": "Croacia",
+          "capital": "Zagreb",
+          "latitud": 45.815,
+          "longitud": 15.9819,
+          "ranking_fifa": 11,
+          "historia": "Croacia fue subcampeona del mundo en 2018 y tercera en 2022. Para un pais pequeno, sus resultados son extraordinarios. Su mediocampo ha sido referencia mundial.",
+          "ventajas": "Mediocampo de elite y enorme caracter competitivo.",
+          "desventajas": "Plantilla envejecida en sus figuras clave.",
+          "bandera": "🇭🇷"
+        }
+      ]
+    },
+    {
+      "confederacion": "CONMEBOL",
+      "continente": "America del Sur",
+      "equipos": [
+        {
+          "nombre": "Brasil",
+          "pais": "Brasil",
+          "capital": "Brasilia",
+          "latitud": -15.7939,
+          "longitud": -47.8828,
+          "ranking_fifa": 6,
+          "historia": "Brasil es la unica seleccion pentacampeona del mundo (1958, 1962, 1970, 1994 y 2002). Es el equipo con mas participaciones mundialistas y nunca ha faltado a una Copa del Mundo. Representa la maxima tradicion del jogo bonito.",
+          "ventajas": "Abundante talento ofensivo individual y una cantera inagotable de futbolistas de elite.",
+          "desventajas": "Inestabilidad reciente y falta de un proyecto solido tras varios cambios de entrenador.",
+          "bandera": "🇧🇷"
+        },
+        {
+          "nombre": "Paraguay",
+          "pais": "Paraguay",
+          "capital": "Asuncion",
+          "latitud": -25.2637,
+          "longitud": -57.5759,
+          "ranking_fifa": 41,
+          "historia": "Paraguay alcanzo los cuartos de final en Sudafrica 2010, su mejor actuacion mundialista. Es una seleccion historicamente dura y combativa en eliminatorias sudamericanas. Regresa a un Mundial tras varias ausencias.",
+          "ventajas": "Solidez defensiva y caracter competitivo con orden tactico bajo su cuerpo tecnico.",
+          "desventajas": "Escasa generacion de juego ofensivo y dependencia de resultados ajustados.",
+          "bandera": "🇵🇾"
+        },
+        {
+          "nombre": "Ecuador",
+          "pais": "Ecuador",
+          "capital": "Quito",
+          "latitud": -0.1807,
+          "longitud": -78.4678,
+          "ranking_fifa": 23,
+          "historia": "Ecuador ha clasificado a varios mundiales desde 2002, alcanzando los octavos de final en Alemania 2006. En las eliminatorias recientes mostro solidez pese a deducciones de puntos. Su altura en Quito es un factor diferencial como local.",
+          "ventajas": "Defensa joven y robusta con gran fortaleza fisica y equipo bien estructurado.",
+          "desventajas": "Falta de pegada ofensiva y poca experiencia en instancias decisivas mundialistas.",
+          "bandera": "🇪🇨"
+        },
+        {
+          "nombre": "Uruguay",
+          "pais": "Uruguay",
+          "capital": "Montevideo",
+          "latitud": -34.9011,
+          "longitud": -56.1645,
+          "ranking_fifa": 16,
+          "historia": "Uruguay fue el primer campeon del mundo en 1930 y volvio a conquistar el titulo en 1950 con el historico Maracanazo. Es una potencia tradicional con cuatro estrellas oficiales reconocidas por FIFA. Su garra charrua es legendaria.",
+          "ventajas": "Renovacion generacional prometedora bajo un esquema tactico ordenado y competitivo.",
+          "desventajas": "Plantel corto en profundidad y presion por mantener el legado de jugadores historicos.",
+          "bandera": "🇺🇾"
+        },
+        {
+          "nombre": "Argentina",
+          "pais": "Argentina",
+          "capital": "Buenos Aires",
+          "latitud": -34.6037,
+          "longitud": -58.3816,
+          "ranking_fifa": 1,
+          "historia": "Argentina es tricampeona del mundo, con titulos en 1978, 1986 y 2022. La conquista en Qatar 2022 de la mano de Lionel Messi consolido una generacion dorada. Es una de las potencias historicas del futbol mundial.",
+          "ventajas": "Cuenta con Lionel Messi y una columna vertebral campeona del mundo con gran jerarquia.",
+          "desventajas": "Dependencia de jugadores veteranos cuya edad avanzada genera dudas sobre su rendimiento.",
+          "bandera": "🇦🇷"
+        },
+        {
+          "nombre": "Colombia",
+          "pais": "Colombia",
+          "capital": "Bogota",
+          "latitud": 4.711,
+          "longitud": -74.0721,
+          "ranking_fifa": 13,
+          "historia": "Colombia vivio su epoca dorada en los anos noventa y alcanzo los cuartos de final en Brasil 2014. Fue subcampeona de la Copa America 2024 mostrando un gran nivel. Cuenta con una generacion talentosa liderada por James Rodriguez.",
+          "ventajas": "Mediocampo creativo y juego asociativo de gran calidad con James Rodriguez en su mejor forma.",
+          "desventajas": "Irregularidad defensiva y falta de un goleador consistente de area.",
+          "bandera": "🇨🇴"
+        }
+      ]
+    },
+    {
+      "confederacion": "OFC",
+      "continente": "Oceania",
+      "equipos": [
+        {
+          "nombre": "Nueva Zelanda",
+          "pais": "Nueva Zelanda",
+          "capital": "Wellington",
+          "latitud": -41.2865,
+          "longitud": 174.7762,
+          "ranking_fifa": 86,
+          "historia": "Nueva Zelanda, apodada los 'All Whites', es la potencia dominante de la OFC y ha clasificado a los Mundiales de 1982 y 2010. En Sudafrica 2010 logro la hazana de terminar invicta en fase de grupos con tres empates, aunque sin avanzar. Para 2026 son los grandes favoritos de Oceania, que por primera vez tiene un cupo directo garantizado.",
+          "ventajas": "Dominio absoluto de su confederacion con jugadores fisicos y experiencia europea como Chris Wood.",
+          "desventajas": "Escaso roce competitivo internacional por la debilidad general de los rivales de la OFC.",
+          "bandera": "🇳🇿"
+        }
+      ]
+    }
+  ],
+  "estadios": [
+    {
+      "nombre": "Estadio Azteca",
+      "ciudad": "Ciudad de Mexico",
+      "pais": "Mexico",
+      "latitud": 19.302889,
+      "longitud": -99.150528,
+      "capacidad": 80824
+    },
+    {
+      "nombre": "Estadio Akron",
+      "ciudad": "Zapopan",
+      "pais": "Mexico",
+      "latitud": 20.681944,
+      "longitud": -103.462778,
+      "capacidad": 45664
+    },
+    {
+      "nombre": "Estadio BBVA",
+      "ciudad": "Guadalupe",
+      "pais": "Mexico",
+      "latitud": 25.669167,
+      "longitud": -100.244722,
+      "capacidad": 51243
+    },
+    {
+      "nombre": "BMO Field",
+      "ciudad": "Toronto",
+      "pais": "Canada",
+      "latitud": 43.633056,
+      "longitud": -79.418611,
+      "capacidad": 43036
+    },
+    {
+      "nombre": "BC Place",
+      "ciudad": "Vancouver",
+      "pais": "Canada",
+      "latitud": 49.276667,
+      "longitud": -123.111944,
+      "capacidad": 52497
+    },
+    {
+      "nombre": "SoFi Stadium",
+      "ciudad": "Inglewood",
+      "pais": "Estados Unidos",
+      "latitud": 33.953333,
+      "longitud": -118.339167,
+      "capacidad": 70492
+    },
+    {
+      "nombre": "MetLife Stadium",
+      "ciudad": "East Rutherford",
+      "pais": "Estados Unidos",
+      "latitud": 40.813611,
+      "longitud": -74.074444,
+      "capacidad": 80663
+    },
+    {
+      "nombre": "AT&T Stadium",
+      "ciudad": "Arlington",
+      "pais": "Estados Unidos",
+      "latitud": 32.747778,
+      "longitud": -97.092778,
+      "capacidad": 70649
+    },
+    {
+      "nombre": "Mercedes-Benz Stadium",
+      "ciudad": "Atlanta",
+      "pais": "Estados Unidos",
+      "latitud": 33.755556,
+      "longitud": -84.400833,
+      "capacidad": 68239
+    },
+    {
+      "nombre": "Hard Rock Stadium",
+      "ciudad": "Miami Gardens",
+      "pais": "Estados Unidos",
+      "latitud": 25.957958,
+      "longitud": -80.238889,
+      "capacidad": 64478
+    },
+    {
+      "nombre": "NRG Stadium",
+      "ciudad": "Houston",
+      "pais": "Estados Unidos",
+      "latitud": 29.684722,
+      "longitud": -95.410833,
+      "capacidad": 68777
+    },
+    {
+      "nombre": "Arrowhead Stadium",
+      "ciudad": "Kansas City",
+      "pais": "Estados Unidos",
+      "latitud": 39.048889,
+      "longitud": -94.483889,
+      "capacidad": 69045
+    },
+    {
+      "nombre": "Lumen Field",
+      "ciudad": "Seattle",
+      "pais": "Estados Unidos",
+      "latitud": 47.595278,
+      "longitud": -122.331667,
+      "capacidad": 66925
+    },
+    {
+      "nombre": "Levi's Stadium",
+      "ciudad": "Santa Clara",
+      "pais": "Estados Unidos",
+      "latitud": 37.403,
+      "longitud": -121.969722,
+      "capacidad": 68827
+    },
+    {
+      "nombre": "Gillette Stadium",
+      "ciudad": "Foxborough",
+      "pais": "Estados Unidos",
+      "latitud": 42.090944,
+      "longitud": -71.264344,
+      "capacidad": 64146
+    },
+    {
+      "nombre": "Lincoln Financial Field",
+      "ciudad": "Philadelphia",
+      "pais": "Estados Unidos",
+      "latitud": 39.900833,
+      "longitud": -75.1675,
+      "capacidad": 68324
+    }
+  ],
+  "grupos": [
+    {
+      "nombre": "A",
+      "equipos": [
+        "Mexico",
+        "Sudafrica",
+        "Corea del Sur",
+        "Republica Checa"
+      ]
+    },
+    {
+      "nombre": "B",
+      "equipos": [
+        "Suiza",
+        "Canada",
+        "Bosnia y Herzegovina",
+        "Catar"
+      ]
+    },
+    {
+      "nombre": "C",
+      "equipos": [
+        "Brasil",
+        "Marruecos",
+        "Escocia",
+        "Haiti"
+      ]
+    },
+    {
+      "nombre": "D",
+      "equipos": [
+        "Estados Unidos",
+        "Australia",
+        "Paraguay",
+        "Turquia"
+      ]
+    },
+    {
+      "nombre": "E",
+      "equipos": [
+        "Alemania",
+        "Costa de Marfil",
+        "Ecuador",
+        "Curazao"
+      ]
+    },
+    {
+      "nombre": "F",
+      "equipos": [
+        "Paises Bajos",
+        "Japon",
+        "Suecia",
+        "Tunez"
+      ]
+    },
+    {
+      "nombre": "G",
+      "equipos": [
+        "Egipto",
+        "Iran",
+        "Belgica",
+        "Nueva Zelanda"
+      ]
+    },
+    {
+      "nombre": "H",
+      "equipos": [
+        "Espana",
+        "Uruguay",
+        "Cabo Verde",
+        "Arabia Saudita"
+      ]
+    },
+    {
+      "nombre": "I",
+      "equipos": [
+        "Francia",
+        "Noruega",
+        "Senegal",
+        "Iraq"
+      ]
+    },
+    {
+      "nombre": "J",
+      "equipos": [
+        "Argentina",
+        "Austria",
+        "Argelia",
+        "Jordania"
+      ]
+    },
+    {
+      "nombre": "K",
+      "equipos": [
+        "Colombia",
+        "Portugal",
+        "Republica Democratica del Congo",
+        "Uzbekistan"
+      ]
+    },
+    {
+      "nombre": "L",
+      "equipos": [
+        "Inglaterra",
+        "Ghana",
+        "Croacia",
+        "Panama"
+      ]
+    }
+  ]
+}

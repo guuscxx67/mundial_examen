@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mundial FIFA 2026 - Simulacion, Administracion y Geolocalizacion</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="ball">⚽</span>
+      <div>
+        <h1>Copa Mundial FIFA 2026</h1>
+        <small>Simulacion · Administracion · Geolocalizacion</small>
+      </div>
+    </div>
+    <nav class="tabs">
+      <button class="tab active" data-view="resumen">Resumen</button>
+      <button class="tab" data-view="selecciones">Selecciones</button>
+      <button class="tab" data-view="grupos">Grupos</button>
+      <button class="tab" data-view="estadios">Estadios y Mapa</button>
+      <button class="tab" data-view="partidos">Partidos</button>
+      <button class="tab" data-view="fasefinal">Fase Final</button>
+      <button class="tab" data-view="boletos">Boletos</button>
+    </nav>
+  </header>
+
+  <main id="app">
+    <!-- RESUMEN -->
+    <section class="view active" id="view-resumen">
+      <h2>Resumen del torneo</h2>
+      <div id="cards-resumen" class="cards"></div>
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Maximos goleadores (selecciones)</h3>
+          <div id="tabla-goleadores"></div>
+        </div>
+        <div class="panel">
+          <h3>Rendimiento por confederacion</h3>
+          <div id="tabla-confed"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SELECCIONES -->
+    <section class="view" id="view-selecciones">
+      <h2>Selecciones</h2>
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Top 10 del ranking FIFA</h3>
+          <div id="tabla-ranking"></div>
+        </div>
+        <div class="panel">
+          <h3>Alta de seleccion (equipo)</h3>
+          <form id="form-seleccion" class="form">
+            <input name="nombre" placeholder="Nombre de la seleccion" required />
+            <input name="pais" placeholder="Pais" required />
+            <select name="id_continente" required></select>
+            <input name="capital" placeholder="Capital" />
+            <input name="ranking" type="number" min="1" placeholder="Ranking FIFA" />
+            <input name="bandera" placeholder="Bandera (emoji)" maxlength="8" />
+            <input name="latitud" type="number" step="0.000001" placeholder="Latitud" />
+            <input name="longitud" type="number" step="0.000001" placeholder="Longitud" />
+            <button type="submit">Agregar seleccion</button>
+          </form>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Listado completo (<span id="conteo-selecciones">0</span>)</h3>
+        <div id="tabla-selecciones"></div>
+      </div>
+    </section>
+
+    <!-- GRUPOS -->
+    <section class="view" id="view-grupos">
+      <h2>Grupos y Clasificacion</h2>
+      <div class="selector-grupos" id="selector-grupos"></div>
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-head">
+            <h3 id="titulo-grupo">Grupo A</h3>
+            <div class="share" id="share-grupo"></div>
+          </div>
+          <div id="tabla-grupo"></div>
+        </div>
+        <div class="panel">
+          <h3>Asignar seleccion al grupo</h3>
+          <form id="form-asignar" class="form">
+            <select name="id_seleccion" id="sel-asignar" required></select>
+            <button type="submit">Asignar al grupo seleccionado</button>
+          </form>
+          <h3 style="margin-top:1rem">Compartir clasificacion general</h3>
+          <div class="share" id="share-clasificacion"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ESTADIOS Y MAPA -->
+    <section class="view" id="view-estadios">
+      <h2>Estadios y Geolocalizacion</h2>
+      <div id="mapa"></div>
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Estadios sede (<span id="conteo-estadios">0</span>)</h3>
+          <div id="tabla-estadios"></div>
+        </div>
+        <div class="panel">
+          <h3>Alta de estadio</h3>
+          <form id="form-estadio" class="form">
+            <input name="nombre" placeholder="Nombre del estadio" required />
+            <input name="ciudad" placeholder="Ciudad" required />
+            <input name="pais" placeholder="Pais" required />
+            <input name="latitud" type="number" step="0.000001" placeholder="Latitud" required />
+            <input name="longitud" type="number" step="0.000001" placeholder="Longitud" required />
+            <input name="capacidad" type="number" min="1" placeholder="Capacidad" />
+            <button type="submit">Agregar estadio</button>
+          </form>
+          <h3 style="margin-top:1rem">Compartir ruta a un estadio</h3>
+          <form id="form-ruta" class="form-inline">
+            <select name="estadio" id="ruta-estadio"></select>
+            <button type="button" id="btn-mi-ubicacion">Usar mi ubicacion</button>
+          </form>
+          <div class="share" id="share-ruta"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PARTIDOS -->
+    <section class="view" id="view-partidos">
+      <h2>Partidos</h2>
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Alta de partido</h3>
+          <form id="form-partido" class="form">
+            <select name="id_grupo" id="part-grupo"></select>
+            <select name="id_equipo_local" id="part-local" required></select>
+            <select name="id_equipo_visitante" id="part-visitante" required></select>
+            <select name="id_estadio" id="part-estadio"></select>
+            <input name="fecha" type="date" />
+            <input name="horario" type="time" />
+            <button type="submit">Programar partido</button>
+          </form>
+        </div>
+        <div class="panel">
+          <h3>Registrar resultado</h3>
+          <form id="form-resultado" class="form">
+            <select name="id" id="res-partido" required></select>
+            <div class="form-inline">
+              <input name="goles_local" type="number" min="0" placeholder="Goles local" required />
+              <input name="goles_visitante" type="number" min="0" placeholder="Goles visitante" required />
+            </div>
+            <button type="submit">Guardar resultado</button>
+          </form>
+          <p class="hint">Al guardar, el trigger de la BD recalcula la tabla de posiciones del grupo.</p>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Calendario / Resultados</h3>
+        <div id="tabla-partidos"></div>
+      </div>
+    </section>
+
+    <!-- FASE FINAL -->
+    <section class="view" id="view-fasefinal">
+      <h2>Fase Final (eliminatorias)</h2>
+      <div class="panel">
+        <p>Tras la fase de grupos, las sedes se asignan <strong>automaticamente</strong>.</p>
+        <button id="btn-generar-fasefinal" class="btn-primary">Generar cuadro con sedes automaticas</button>
+        <div id="bracket"></div>
+      </div>
+    </section>
+
+    <!-- BOLETOS -->
+    <section class="view" id="view-boletos">
+      <h2>Boletos</h2>
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Alta de usuario</h3>
+          <form id="form-usuario" class="form">
+            <input name="nombre" placeholder="Nombre del usuario" required />
+            <input name="email" type="email" placeholder="Correo" />
+            <button type="submit">Agregar usuario</button>
+          </form>
+        </div>
+        <div class="panel">
+          <h3>Alta de boleto</h3>
+          <form id="form-boleto" class="form">
+            <select name="id_usuario" id="bol-usuario" required></select>
+            <select name="id_partido" id="bol-partido" required></select>
+            <input name="costo" type="number" min="0" step="0.01" placeholder="Costo" />
+            <button type="submit">Comprar boleto</button>
+          </form>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Boletos vendidos</h3>
+        <div id="tabla-boletos"></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/mapa.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

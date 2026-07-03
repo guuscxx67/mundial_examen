@@ -2,7 +2,13 @@
 // Uso: node scripts/generar-consultas-md.mjs > docs/consultas-resultados.md
 import pg from 'pg';
 const { Pool } = pg;
-const pool = new Pool({ host: 'localhost', port: 55432, user: 'mundial', password: 'mundial2026', database: 'mundial2026' });
+const pool = new Pool({
+  host: process.env.PGHOST || 'localhost',
+  port: Number(process.env.PGPORT) || 55432,
+  user: process.env.PGUSER || 'mundial',
+  password: process.env.PGPASSWORD || 'mundial2026',
+  database: process.env.PGDATABASE || 'mundial2026',
+});
 
 const corta = (v) => {
   if (v == null) return '';

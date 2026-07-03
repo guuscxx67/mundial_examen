@@ -38,6 +38,7 @@ CREATE TABLE selecciones (
     historia        TEXT,
     ventajas        TEXT,
     desventajas     TEXT,
+    entrenador      VARCHAR(80),                        -- Director tecnico
     ranking         INT          CHECK (ranking > 0),  -- Ranking FIFA mundial
     bandera         VARCHAR(16),                        -- Emoji de la bandera
     latitud         NUMERIC(9,6),                       -- Geolocalizacion
@@ -128,11 +129,16 @@ CREATE TABLE fase_final (
                             CHECK (nombre_fase IN ('Dieciseisavos','Octavos',
                                    'Cuartos','Semifinal','Tercer Lugar','Final')),
     llave                   VARCHAR(20),    -- Identificador de la llave, ej. 'O1'
-    id_seleccion_local      INT REFERENCES selecciones(id),  -- Clasificado 1
-    id_seleccion_visitante  INT REFERENCES selecciones(id),  -- Clasificado 2
+    id_seleccion_local      INT REFERENCES selecciones(id),  -- Clasificado 1 (NULL = por definir)
+    id_seleccion_visitante  INT REFERENCES selecciones(id),  -- Clasificado 2 (NULL = por definir)
     id_estadio              INT REFERENCES estadios(id),     -- Sede
     fecha                   DATE,
     horario                 TIME,
+    goles_local             INT CHECK (goles_local >= 0),        -- Marcador (si jugado)
+    goles_visitante         INT CHECK (goles_visitante >= 0),
+    penales_local           INT CHECK (penales_local >= 0),      -- Definicion por penales
+    penales_visitante       INT CHECK (penales_visitante >= 0),
+    jugado                  BOOLEAN NOT NULL DEFAULT FALSE,
     id_partido              INT REFERENCES partidos(id) ON DELETE SET NULL
 );
 

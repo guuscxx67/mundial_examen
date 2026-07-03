@@ -37,7 +37,8 @@ const html = `<!DOCTYPE html>
   @media print {
     body { padding: 0; max-width: none; }
     h2 { page-break-before: auto; }
-    pre, table, .mermaid { page-break-inside: avoid; }
+    table, .mermaid { page-break-inside: avoid; }
+    pre { white-space: pre-wrap; word-wrap: break-word; }
   }
   .aviso { background: #fff8e1; border: 1px solid #f5c518; padding: .6rem 1rem; border-radius: 6px;
            font-size: .9rem; }

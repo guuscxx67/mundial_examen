@@ -5,6 +5,31 @@ FIFA 2026 (sedes: México 🇲🇽, Estados Unidos 🇺🇸 y Canadá 🇨🇦).
 
 Base de datos asignada: **PostgreSQL**.
 
+El mismo frontend (HTML + CSS + JavaScript) puede consumir un backend de **MySQL,
+PostgreSQL o MongoDB**; este equipo implementa **PostgreSQL**.
+
+---
+
+## 🧩 Módulos del frontend (13)
+
+Una sola aplicación de página única (SPA) con estos módulos, según la especificación:
+
+| # | Módulo | Contenido |
+|---|--------|-----------|
+| 1 | **Inicio** | Logo, países sede, contador de partidos/equipos/estadios/goles, video introductorio, noticias |
+| 2 | **Confederaciones** | Menú por confederación (UEFA, CONMEBOL, CONCACAF, CAF, AFC, OFC) y **ficha emergente** por selección (nombre, bandera, ranking, historia, ventajas, desventajas, entrenador, grupo y estadios con Google Maps) |
+| 3 | **Selecciones** | Ranking FIFA top 10 y listado completo con buscador |
+| 4 | **Grupos** | Tabla por grupo: Bandera · Selección · PJ · PG · PE · PP · GF · GC · DG · PT + partidos |
+| 5 | **Calendario** | Partidos agrupados por fecha, con filtros por fase y estado |
+| 6 | **Clasificación** | Posiciones de todos los grupos + clasificados a la fase final |
+| 7 | **Simulador** | Registrar/simular resultados (el trigger recalcula la tabla) y generar la fase final |
+| 8 | **Fase Final** | Cuadro de eliminatorias (32 equipos) con sedes, fechas, horarios y costo |
+| 9 | **Estadios** | Nombre, ubicación en Google Maps, equipos, fechas, horarios y costo de boletos |
+| 10 | **Geolocalización** | Mapa interactivo (Leaflet) con estadios y capitales, ruta y compartir |
+| 11 | **Boletos** | Compra de boletos y usuarios |
+| 12 | **Administrador** | Altas y gestión (CRUD) de selecciones, estadios, grupos y partidos |
+| 13 | **Acerca del Proyecto** | Descripción, stack, módulos y requisitos cubiertos |
+
 ---
 
 ## ✔️ Requisitos del proyecto cubiertos
@@ -79,6 +104,11 @@ npm start
 
 Abrir **http://localhost:3000** en el navegador.
 
+> ♻️ **Si ya habías levantado la base de datos antes**, ejecuta `npm run db:reset`
+> para recrear el volumen y aplicar el esquema actualizado (se añadió la columna
+> `entrenador` a `selecciones`). Los scripts de inicialización de Docker solo se
+> ejecutan la **primera** vez que se crea el volumen.
+
 > ⚠️ **Nota sobre el puerto:** la base de datos del contenedor se publica en el puerto
 > **55432** del host (para no chocar con instalaciones nativas de PostgreSQL que suelen
 > usar 5432–5434). El contenedor internamente sigue usando 5432.
@@ -108,6 +138,7 @@ docker exec -i mundial2026_db psql -U mundial -d mundial2026 < db/queries.sql
 | GET | `/api/health` | Estado del sistema |
 | GET/POST/PUT/DELETE | `/api/selecciones` | CRUD de selecciones |
 | GET | `/api/selecciones/ranking/top?limite=10` | Top de ranking FIFA |
+| GET | `/api/selecciones/:id/perfil` | Ficha completa (grupo, estadios donde juega, entrenador) para el cuadro emergente |
 | GET | `/api/continentes/paises` | Países por confederación |
 | GET | `/api/grupos/:id/clasificacion` | Tabla de posiciones de un grupo |
 | POST | `/api/grupos/:id/asignar` | Asignar selección a un grupo |

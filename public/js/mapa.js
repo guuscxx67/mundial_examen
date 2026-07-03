@@ -22,10 +22,21 @@ const Mapa = {
   },
 
   iconoEstadio() {
-    return L.divIcon({ className: 'mk', html: '🏟️', iconSize: [24, 24] });
+    return L.divIcon({
+      className: 'mk-est', html: '<i class="fa-solid fa-location-dot"></i>',
+      iconSize: [26, 26], iconAnchor: [13, 26], popupAnchor: [0, -24],
+    });
   },
   iconoCapital() {
-    return L.divIcon({ className: 'mk', html: '🚩', iconSize: [18, 18] });
+    return L.divIcon({
+      className: 'mk-cap', html: '<i class="fa-solid fa-flag"></i>',
+      iconSize: [20, 20], iconAnchor: [10, 20], popupAnchor: [0, -16],
+    });
+  },
+
+  // Icono de bandera (usa el helper global 'bandera' si esta disponible)
+  _bandera(emoji) {
+    return (typeof bandera === 'function') ? bandera(emoji) : (emoji || '');
   },
 
   pintarEstadios(estadios) {
@@ -34,7 +45,7 @@ const Mapa = {
     estadios.forEach((e) => {
       const m = L.marker([e.latitud, e.longitud], { icon: this.iconoEstadio() });
       m.bindPopup(
-        `<b>${e.nombre}</b><br>${e.ciudad}, ${e.pais}<br>` +
+        `<b><i class="fa-solid fa-location-dot"></i> ${e.nombre}</b><br>${e.ciudad}, ${e.pais}<br>` +
         `Capacidad: ${Number(e.capacidad).toLocaleString()}<br>` +
         `<a href="${this.gmaps(e.latitud, e.longitud)}" target="_blank">Ver en Google Maps</a>`
       );
@@ -48,7 +59,7 @@ const Mapa = {
     selecciones.forEach((s) => {
       if (s.latitud == null || s.longitud == null) return;
       const m = L.marker([s.latitud, s.longitud], { icon: this.iconoCapital() });
-      m.bindPopup(`<b>${s.bandera || ''} ${s.nombre}</b><br>${s.capital || ''}<br>Ranking FIFA: ${s.ranking || '-'}`);
+      m.bindPopup(`<b>${this._bandera(s.bandera)} ${s.nombre}</b><br>${s.capital || ''}<br>Ranking FIFA: ${s.ranking || '-'}`);
       this.capas.capitales.addLayer(m);
     });
   },
@@ -56,5 +67,14 @@ const Mapa = {
   centrar(lat, lon, zoom = 12) {
     this.init();
     this.map.setView([lat, lon], zoom);
+  },
+
+  // Muestra u oculta una capa ('estadios' | 'capitales') en el mapa
+  mostrarCapa(nombre, visible) {
+    this.init();
+    const capa = this.capas[nombre];
+    if (!capa) return;
+    if (visible) { if (!this.map.hasLayer(capa)) capa.addTo(this.map); }
+    else if (this.map.hasLayer(capa)) this.map.removeLayer(capa);
   },
 };

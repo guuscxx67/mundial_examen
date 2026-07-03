@@ -1,9 +1,9 @@
 // ============================================================================
-//  Genera el dataset y el seed REALES del Mundial 2026 al 25/06/2026.
-//  - 48 selecciones en sus grupos reales (con las posiciones aportadas).
-//  - Reconstruye los marcadores individuales de cada partido mediante un solver
-//    de restricciones, de modo que reproduzcan EXACTAMENTE las posiciones.
-//  - Ancla los marcadores reales confirmados por la prensa (mapa FIXED).
+//  Genera el dataset y el seed REALES del Mundial 2026 al 01/07/2026.
+//  - 48 selecciones en sus grupos reales.
+//  - 72 partidos de grupos con marcadores, fechas y SEDES reales (Wikipedia por grupo),
+//    verificados: cada grupo reproduce EXACTAMENTE la tabla oficial (GD y Pts).
+//  - Fase final (cuadro) con sedes/fechas/horas oficiales de la FIFA.
 //  Salidas: db/dataset.json (real) y db/seed.sql.
 //  Uso: node scripts/generar-datos-reales.mjs
 // ============================================================================
@@ -66,221 +66,197 @@ const NUEVOS = {
 };
 for (const [nombre, d] of Object.entries(NUEVOS)) meta[nombre] = { nombre, ...d };
 
-// --- Posiciones reales aportadas (al 25/06/2026). Orden = posicion en la tabla ---
-// n = nombre formal en la BD. Grupos A,B,C completos (pj=3); D-L con pj=2.
-const GRUPOS = [
-  { nombre: 'A', equipos: [
-    { n: 'Mexico', pj: 3, w: 3, d: 0, l: 0, gf: 6, gc: 0 },
-    { n: 'Sudafrica', pj: 3, w: 1, d: 1, l: 1, gf: 2, gc: 3 },
-    { n: 'Corea del Sur', pj: 3, w: 1, d: 0, l: 2, gf: 2, gc: 3 },
-    { n: 'Republica Checa', pj: 3, w: 0, d: 1, l: 2, gf: 2, gc: 6 } ] },
-  { nombre: 'B', equipos: [
-    { n: 'Suiza', pj: 3, w: 2, d: 1, l: 0, gf: 7, gc: 3 },
-    { n: 'Canada', pj: 3, w: 1, d: 1, l: 1, gf: 8, gc: 3 },
-    { n: 'Bosnia y Herzegovina', pj: 3, w: 1, d: 1, l: 1, gf: 5, gc: 6 },
-    { n: 'Catar', pj: 3, w: 0, d: 1, l: 2, gf: 2, gc: 10 } ] },
-  { nombre: 'C', equipos: [
-    { n: 'Brasil', pj: 3, w: 2, d: 1, l: 0, gf: 7, gc: 1 },
-    { n: 'Marruecos', pj: 3, w: 2, d: 1, l: 0, gf: 6, gc: 3 },
-    { n: 'Escocia', pj: 3, w: 1, d: 0, l: 2, gf: 1, gc: 4 },
-    { n: 'Haiti', pj: 3, w: 0, d: 0, l: 3, gf: 2, gc: 8 } ] },
-  { nombre: 'D', equipos: [
-    { n: 'Estados Unidos', pj: 3, w: 2, d: 0, l: 1, gf: 8, gc: 4 },
-    { n: 'Australia', pj: 3, w: 1, d: 1, l: 1, gf: 2, gc: 2 },
-    { n: 'Paraguay', pj: 3, w: 1, d: 1, l: 1, gf: 2, gc: 4 },
-    { n: 'Turquia', pj: 3, w: 1, d: 0, l: 2, gf: 3, gc: 5 } ] },
-  { nombre: 'E', equipos: [
-    { n: 'Alemania', pj: 3, w: 2, d: 0, l: 1, gf: 10, gc: 4 },
-    { n: 'Costa de Marfil', pj: 3, w: 2, d: 0, l: 1, gf: 4, gc: 2 },
-    { n: 'Ecuador', pj: 3, w: 1, d: 1, l: 1, gf: 2, gc: 2 },
-    { n: 'Curazao', pj: 3, w: 0, d: 1, l: 2, gf: 1, gc: 9 } ] },
-  { nombre: 'F', equipos: [
-    { n: 'Paises Bajos', pj: 3, w: 2, d: 1, l: 0, gf: 10, gc: 4 },
-    { n: 'Japon', pj: 3, w: 1, d: 2, l: 0, gf: 7, gc: 3 },
-    { n: 'Suecia', pj: 3, w: 1, d: 1, l: 1, gf: 7, gc: 7 },
-    { n: 'Tunez', pj: 3, w: 0, d: 0, l: 3, gf: 2, gc: 12 } ] },
-  { nombre: 'G', equipos: [
-    { n: 'Egipto', pj: 2, w: 1, d: 1, l: 0, gf: 4, gc: 2 },
-    { n: 'Iran', pj: 2, w: 0, d: 2, l: 0, gf: 2, gc: 2 },
-    { n: 'Belgica', pj: 2, w: 0, d: 2, l: 0, gf: 1, gc: 1 },
-    { n: 'Nueva Zelanda', pj: 2, w: 0, d: 1, l: 1, gf: 3, gc: 5 } ] },
-  { nombre: 'H', equipos: [
-    { n: 'Espana', pj: 2, w: 1, d: 1, l: 0, gf: 4, gc: 0 },
-    { n: 'Uruguay', pj: 2, w: 0, d: 2, l: 0, gf: 3, gc: 3 },
-    { n: 'Cabo Verde', pj: 2, w: 0, d: 2, l: 0, gf: 2, gc: 2 },
-    { n: 'Arabia Saudita', pj: 2, w: 0, d: 1, l: 1, gf: 1, gc: 5 } ] },
-  { nombre: 'I', equipos: [
-    { n: 'Francia', pj: 2, w: 2, d: 0, l: 0, gf: 6, gc: 1 },
-    { n: 'Noruega', pj: 2, w: 2, d: 0, l: 0, gf: 7, gc: 3 },
-    { n: 'Senegal', pj: 2, w: 0, d: 0, l: 2, gf: 3, gc: 6 },
-    { n: 'Iraq', pj: 2, w: 0, d: 0, l: 2, gf: 1, gc: 7 } ] },
-  { nombre: 'J', equipos: [
-    { n: 'Argentina', pj: 2, w: 2, d: 0, l: 0, gf: 5, gc: 0 },
-    { n: 'Austria', pj: 2, w: 1, d: 0, l: 1, gf: 3, gc: 3 },
-    { n: 'Argelia', pj: 2, w: 1, d: 0, l: 1, gf: 2, gc: 4 },
-    { n: 'Jordania', pj: 2, w: 0, d: 0, l: 2, gf: 2, gc: 5 } ] },
-  { nombre: 'K', equipos: [
-    { n: 'Colombia', pj: 2, w: 2, d: 0, l: 0, gf: 4, gc: 1 },
-    { n: 'Portugal', pj: 2, w: 1, d: 1, l: 0, gf: 6, gc: 1 },
-    { n: 'Republica Democratica del Congo', pj: 2, w: 0, d: 1, l: 1, gf: 1, gc: 2 },
-    { n: 'Uzbekistan', pj: 2, w: 0, d: 0, l: 2, gf: 1, gc: 8 } ] },
-  { nombre: 'L', equipos: [
-    { n: 'Inglaterra', pj: 2, w: 1, d: 1, l: 0, gf: 4, gc: 2 },
-    { n: 'Ghana', pj: 2, w: 1, d: 1, l: 0, gf: 1, gc: 0 },
-    { n: 'Croacia', pj: 2, w: 1, d: 0, l: 1, gf: 3, gc: 4 },
-    { n: 'Panama', pj: 2, w: 0, d: 0, l: 2, gf: 0, gc: 2 } ] },
+// --- Directores tecnicos (entrenadores) de cada seleccion ---
+const ENTRENADORES = {
+  'Mexico': 'Javier Aguirre', 'Sudafrica': 'Hugo Broos', 'Corea del Sur': 'Hong Myung-bo',
+  'Republica Checa': 'Ivan Hasek', 'Suiza': 'Murat Yakin', 'Canada': 'Jesse Marsch',
+  'Bosnia y Herzegovina': 'Sergej Barbarez', 'Catar': 'Julen Lopetegui', 'Brasil': 'Carlo Ancelotti',
+  'Marruecos': 'Walid Regragui', 'Escocia': 'Steve Clarke', 'Haiti': 'Sebastien Migne',
+  'Estados Unidos': 'Mauricio Pochettino', 'Australia': 'Tony Popovic', 'Paraguay': 'Gustavo Alfaro',
+  'Turquia': 'Vincenzo Montella', 'Alemania': 'Julian Nagelsmann', 'Costa de Marfil': 'Emerse Fae',
+  'Ecuador': 'Sebastian Beccacece', 'Curazao': 'Dick Advocaat', 'Paises Bajos': 'Ronald Koeman',
+  'Japon': 'Hajime Moriyasu', 'Suecia': 'Jon Dahl Tomasson', 'Tunez': 'Sami Trabelsi',
+  'Egipto': 'Hossam Hassan', 'Iran': 'Amir Ghalenoei', 'Belgica': 'Rudi Garcia',
+  'Nueva Zelanda': 'Darren Bazeley', 'Espana': 'Luis de la Fuente', 'Uruguay': 'Marcelo Bielsa',
+  'Cabo Verde': 'Pedro Leitao Brito (Bubista)', 'Arabia Saudita': 'Herve Renard', 'Francia': 'Didier Deschamps',
+  'Noruega': 'Stale Solbakken', 'Senegal': 'Pape Thiaw', 'Iraq': 'Graham Arnold',
+  'Argentina': 'Lionel Scaloni', 'Austria': 'Ralf Rangnick', 'Argelia': 'Vladimir Petkovic',
+  'Jordania': 'Jamal Sellami', 'Colombia': 'Nestor Lorenzo', 'Portugal': 'Roberto Martinez',
+  'Republica Democratica del Congo': 'Sebastien Desabre', 'Uzbekistan': 'Timur Kapadze',
+  'Inglaterra': 'Thomas Tuchel', 'Ghana': 'Otto Addo', 'Croacia': 'Zlatko Dalic',
+  'Panama': 'Thomas Christiansen',
+};
+for (const nombre of Object.keys(meta)) meta[nombre].entrenador = ENTRENADORES[nombre] || 'Por confirmar';
+
+// --- Equipos de cada grupo (orden estable para asignar ids de seleccion) ---
+const GRUPOS_TEAMS = {
+  A: ['Mexico', 'Sudafrica', 'Corea del Sur', 'Republica Checa'],
+  B: ['Suiza', 'Canada', 'Bosnia y Herzegovina', 'Catar'],
+  C: ['Brasil', 'Marruecos', 'Escocia', 'Haiti'],
+  D: ['Estados Unidos', 'Australia', 'Paraguay', 'Turquia'],
+  E: ['Alemania', 'Costa de Marfil', 'Ecuador', 'Curazao'],
+  F: ['Paises Bajos', 'Japon', 'Suecia', 'Tunez'],
+  G: ['Egipto', 'Iran', 'Belgica', 'Nueva Zelanda'],
+  H: ['Espana', 'Uruguay', 'Cabo Verde', 'Arabia Saudita'],
+  I: ['Francia', 'Noruega', 'Senegal', 'Iraq'],
+  J: ['Argentina', 'Austria', 'Argelia', 'Jordania'],
+  K: ['Colombia', 'Portugal', 'Republica Democratica del Congo', 'Uzbekistan'],
+  L: ['Inglaterra', 'Ghana', 'Croacia', 'Panama'],
+};
+const NOMBRES_GRUPO = Object.keys(GRUPOS_TEAMS); // A..L
+
+// --- Partidos REALES de la fase de grupos (72), fuente: Wikipedia por grupo ---
+// Verificados: cada grupo reproduce EXACTAMENTE la tabla oficial (GD y Pts).
+// [grupo, local, goles_local, goles_visitante, visitante, fecha, id_estadio]
+// Estadios: 1 Azteca, 2 Akron, 3 BBVA, 4 BMO, 5 BC Place, 6 SoFi, 7 MetLife,
+// 8 AT&T, 9 Mercedes-Benz, 10 Hard Rock, 11 NRG, 12 Arrowhead, 13 Lumen, 14 Levi's,
+// 15 Gillette, 16 Lincoln Financial.
+const PARTIDOS_G = [
+  ['A', 'Mexico', 2, 0, 'Sudafrica', '2026-06-11', 1],
+  ['A', 'Corea del Sur', 2, 1, 'Republica Checa', '2026-06-11', 2],
+  ['A', 'Republica Checa', 1, 1, 'Sudafrica', '2026-06-18', 9],
+  ['A', 'Mexico', 1, 0, 'Corea del Sur', '2026-06-18', 2],
+  ['A', 'Republica Checa', 0, 3, 'Mexico', '2026-06-24', 1],
+  ['A', 'Sudafrica', 1, 0, 'Corea del Sur', '2026-06-24', 3],
+  ['B', 'Canada', 1, 1, 'Bosnia y Herzegovina', '2026-06-12', 4],
+  ['B', 'Catar', 1, 1, 'Suiza', '2026-06-13', 14],
+  ['B', 'Suiza', 4, 1, 'Bosnia y Herzegovina', '2026-06-18', 6],
+  ['B', 'Canada', 6, 0, 'Catar', '2026-06-18', 5],
+  ['B', 'Suiza', 2, 1, 'Canada', '2026-06-24', 5],
+  ['B', 'Bosnia y Herzegovina', 3, 1, 'Catar', '2026-06-24', 13],
+  ['C', 'Brasil', 1, 1, 'Marruecos', '2026-06-13', 7],
+  ['C', 'Haiti', 0, 1, 'Escocia', '2026-06-13', 15],
+  ['C', 'Escocia', 0, 1, 'Marruecos', '2026-06-19', 15],
+  ['C', 'Brasil', 3, 0, 'Haiti', '2026-06-19', 16],
+  ['C', 'Escocia', 0, 3, 'Brasil', '2026-06-24', 10],
+  ['C', 'Marruecos', 4, 2, 'Haiti', '2026-06-24', 9],
+  ['D', 'Estados Unidos', 4, 1, 'Paraguay', '2026-06-12', 6],
+  ['D', 'Australia', 2, 0, 'Turquia', '2026-06-13', 5],
+  ['D', 'Estados Unidos', 2, 0, 'Australia', '2026-06-19', 13],
+  ['D', 'Turquia', 0, 1, 'Paraguay', '2026-06-19', 14],
+  ['D', 'Turquia', 3, 2, 'Estados Unidos', '2026-06-25', 6],
+  ['D', 'Paraguay', 0, 0, 'Australia', '2026-06-25', 14],
+  ['E', 'Alemania', 7, 1, 'Curazao', '2026-06-14', 11],
+  ['E', 'Costa de Marfil', 1, 0, 'Ecuador', '2026-06-14', 16],
+  ['E', 'Alemania', 2, 1, 'Costa de Marfil', '2026-06-20', 4],
+  ['E', 'Ecuador', 0, 0, 'Curazao', '2026-06-20', 12],
+  ['E', 'Curazao', 0, 2, 'Costa de Marfil', '2026-06-25', 16],
+  ['E', 'Ecuador', 2, 1, 'Alemania', '2026-06-25', 7],
+  ['F', 'Paises Bajos', 2, 2, 'Japon', '2026-06-14', 8],
+  ['F', 'Suecia', 5, 1, 'Tunez', '2026-06-14', 3],
+  ['F', 'Paises Bajos', 5, 1, 'Suecia', '2026-06-20', 11],
+  ['F', 'Tunez', 0, 4, 'Japon', '2026-06-20', 3],
+  ['F', 'Japon', 1, 1, 'Suecia', '2026-06-25', 8],
+  ['F', 'Tunez', 1, 3, 'Paises Bajos', '2026-06-25', 12],
+  ['G', 'Belgica', 1, 1, 'Egipto', '2026-06-15', 13],
+  ['G', 'Iran', 2, 2, 'Nueva Zelanda', '2026-06-15', 6],
+  ['G', 'Belgica', 0, 0, 'Iran', '2026-06-21', 6],
+  ['G', 'Nueva Zelanda', 1, 3, 'Egipto', '2026-06-21', 5],
+  ['G', 'Egipto', 1, 1, 'Iran', '2026-06-26', 13],
+  ['G', 'Nueva Zelanda', 1, 5, 'Belgica', '2026-06-26', 5],
+  ['H', 'Espana', 0, 0, 'Cabo Verde', '2026-06-15', 9],
+  ['H', 'Arabia Saudita', 1, 1, 'Uruguay', '2026-06-15', 10],
+  ['H', 'Espana', 4, 0, 'Arabia Saudita', '2026-06-21', 9],
+  ['H', 'Uruguay', 2, 2, 'Cabo Verde', '2026-06-21', 10],
+  ['H', 'Cabo Verde', 0, 0, 'Arabia Saudita', '2026-06-26', 11],
+  ['H', 'Uruguay', 0, 1, 'Espana', '2026-06-26', 2],
+  ['I', 'Francia', 3, 1, 'Senegal', '2026-06-16', 7],
+  ['I', 'Iraq', 1, 4, 'Noruega', '2026-06-16', 15],
+  ['I', 'Francia', 3, 0, 'Iraq', '2026-06-22', 16],
+  ['I', 'Noruega', 3, 2, 'Senegal', '2026-06-22', 7],
+  ['I', 'Noruega', 1, 4, 'Francia', '2026-06-26', 15],
+  ['I', 'Senegal', 5, 0, 'Iraq', '2026-06-26', 4],
+  ['J', 'Argentina', 3, 0, 'Argelia', '2026-06-16', 12],
+  ['J', 'Austria', 3, 1, 'Jordania', '2026-06-16', 14],
+  ['J', 'Argentina', 2, 0, 'Austria', '2026-06-22', 8],
+  ['J', 'Jordania', 1, 2, 'Argelia', '2026-06-22', 14],
+  ['J', 'Argelia', 3, 3, 'Austria', '2026-06-27', 12],
+  ['J', 'Jordania', 1, 3, 'Argentina', '2026-06-27', 8],
+  ['K', 'Portugal', 1, 1, 'Republica Democratica del Congo', '2026-06-17', 11],
+  ['K', 'Uzbekistan', 1, 3, 'Colombia', '2026-06-17', 1],
+  ['K', 'Portugal', 5, 0, 'Uzbekistan', '2026-06-23', 11],
+  ['K', 'Colombia', 1, 0, 'Republica Democratica del Congo', '2026-06-23', 2],
+  ['K', 'Colombia', 0, 0, 'Portugal', '2026-06-27', 10],
+  ['K', 'Republica Democratica del Congo', 3, 1, 'Uzbekistan', '2026-06-27', 9],
+  ['L', 'Inglaterra', 4, 2, 'Croacia', '2026-06-17', 8],
+  ['L', 'Ghana', 1, 0, 'Panama', '2026-06-17', 4],
+  ['L', 'Inglaterra', 0, 0, 'Ghana', '2026-06-23', 15],
+  ['L', 'Panama', 0, 1, 'Croacia', '2026-06-23', 4],
+  ['L', 'Panama', 0, 2, 'Inglaterra', '2026-06-27', 7],
+  ['L', 'Croacia', 2, 1, 'Ghana', '2026-06-27', 16],
 ];
 
-// --- Marcadores reales confirmados por la prensa (clave "LocalFormal|VisitanteFormal") ---
-const FIXED = {
-  'Mexico|Sudafrica': [2, 0],
-  'Mexico|Corea del Sur': [1, 0],
-  'Canada|Catar': [6, 0],
-  'Alemania|Curazao': [7, 1],
-  'Ghana|Panama': [1, 0],
+// Objetivo de verificacion: posiciones oficiales finales {equipo: [GD, Pts]}
+const TARGET_POS = {
+  Mexico: [6, 9], Sudafrica: [-1, 4], 'Corea del Sur': [-1, 3], 'Republica Checa': [-4, 1],
+  Suiza: [4, 7], Canada: [5, 4], 'Bosnia y Herzegovina': [-1, 4], Catar: [-8, 1],
+  Brasil: [6, 7], Marruecos: [3, 7], Escocia: [-3, 3], Haiti: [-6, 0],
+  'Estados Unidos': [4, 6], Australia: [0, 4], Paraguay: [-2, 4], Turquia: [-2, 3],
+  Alemania: [6, 6], 'Costa de Marfil': [2, 6], Ecuador: [0, 4], Curazao: [-8, 1],
+  'Paises Bajos': [6, 7], Japon: [4, 5], Suecia: [0, 4], Tunez: [-10, 0],
+  Belgica: [4, 5], Egipto: [2, 5], Iran: [0, 3], 'Nueva Zelanda': [-6, 1],
+  Espana: [5, 7], 'Cabo Verde': [0, 3], Uruguay: [-1, 2], 'Arabia Saudita': [-4, 2],
+  Francia: [8, 9], Noruega: [1, 6], Senegal: [2, 3], Iraq: [-11, 0],
+  Argentina: [7, 9], Austria: [0, 4], Argelia: [-2, 4], Jordania: [-5, 0],
+  Colombia: [3, 7], Portugal: [5, 5], 'Republica Democratica del Congo': [1, 4], Uzbekistan: [-9, 0],
+  Inglaterra: [4, 7], Croacia: [0, 6], Ghana: [0, 4], Panama: [-4, 0],
 };
 
 // ============================================================================
-//  Solver de restricciones: encuentra marcadores que reproducen las posiciones
-// ============================================================================
-function resolverGrupo(equipos) {
-  const completo = equipos[0].pj === 3;
-  const pares = [];
-  for (let i = 0; i < 4; i++) for (let j = i + 1; j < 4; j++) pares.push([i, j]);
-
-  const candidatos = completo
-    ? [{ jugados: pares, noJugados: [] }]
-    : [[[0, 1], [2, 3]], [[0, 2], [1, 3]], [[0, 3], [1, 2]]].map((unp) => ({
-        noJugados: unp,
-        jugados: pares.filter((p) => !unp.some((u) => u[0] === p[0] && u[1] === p[1])),
-      }));
-
-  // Primero intenta respetando los marcadores reales anclados (FIXED);
-  // si eso hace inviable el grupo, reintenta sin anclas.
-  for (const useFixed of [true, false]) {
-    for (const cand of candidatos) {
-      const sol = resolver(equipos, cand.jugados, useFixed);
-      if (sol) return { jugados: sol, noJugados: cand.noJugados };
-    }
-  }
-  return null;
-}
-
-function fixedScore(nombreA, nombreB) {
-  if (FIXED[`${nombreA}|${nombreB}`]) return FIXED[`${nombreA}|${nombreB}`];
-  if (FIXED[`${nombreB}|${nombreA}`]) { const [x, y] = FIXED[`${nombreB}|${nombreA}`]; return [y, x]; }
-  return null;
-}
-
-function resolver(eq, jugados, useFixed = true) {
-  const rem = eq.map((t) => ({ gf: t.gf, gc: t.gc, w: t.w, d: t.d, l: t.l }));
-  // ordenar: primero los partidos de equipos mas restringidos (menos GF)
-  const orden = [...jugados].sort((p, q) => (eq[p[0]].gf + eq[p[1]].gf) - (eq[q[0]].gf + eq[q[1]].gf));
-  const res = new Array(orden.length);
-
-  function bt(k) {
-    if (k === orden.length) return rem.every((r) => !r.gf && !r.gc && !r.w && !r.d && !r.l);
-    const [a, b] = orden[k];
-    const fx = useFixed ? fixedScore(eq[a].n, eq[b].n) : null;
-    const aMax = fx ? fx[0] : Math.min(rem[a].gf, rem[b].gc, 9);
-    const aMin = fx ? fx[0] : 0;
-    for (let sa = aMin; sa <= aMax; sa++) {
-      const bMax = fx ? fx[1] : Math.min(rem[b].gf, rem[a].gc, 9);
-      const bMin = fx ? fx[1] : 0;
-      for (let sb = bMin; sb <= bMax; sb++) {
-        const ra = sa > sb ? 'w' : sa === sb ? 'd' : 'l';
-        const rb = sb > sa ? 'w' : sa === sb ? 'd' : 'l';
-        if (rem[a][ra] <= 0 || rem[b][rb] <= 0) continue;
-        rem[a].gf -= sa; rem[a].gc -= sb; rem[a][ra]--;
-        rem[b].gf -= sb; rem[b].gc -= sa; rem[b][rb]--;
-        res[k] = { a, b, sa, sb };
-        if (bt(k + 1)) return true;
-        rem[a].gf += sa; rem[a].gc += sb; rem[a][ra]++;
-        rem[b].gf += sb; rem[b].gc += sa; rem[b][rb]++;
-      }
-    }
-    return false;
-  }
-  return bt(0) ? res.slice() : null;
-}
-
-// ============================================================================
-//  Construir selecciones, grupos, partidos
+//  Construir selecciones, grupos, clasificaciones y partidos (datos reales)
 // ============================================================================
 const selecciones = [];
 const nombreToId = new Map();
 let sid = 1;
-for (const g of GRUPOS) {
-  for (const t of g.equipos) {
-    const m = meta[t.n];
-    if (!m) throw new Error(`Falta metadata de: ${t.n}`);
+for (const g of NOMBRES_GRUPO) {
+  for (const n of GRUPOS_TEAMS[g]) {
+    const m = meta[n];
+    if (!m) throw new Error(`Falta metadata de: ${n}`);
     const reg = { id: sid++, ...m, id_continente: CONF[m.confederacion].id };
     selecciones.push(reg);
-    nombreToId.set(t.n, reg.id);
+    nombreToId.set(n, reg.id);
   }
 }
 
-const FECHAS = {
-  1: ['2026-06-11', '2026-06-12', '2026-06-13', '2026-06-14'],
-  2: ['2026-06-17', '2026-06-18', '2026-06-19', '2026-06-20'],
-};
-const horarios = ['12:00', '15:00', '18:00', '21:00'];
+const grupos = NOMBRES_GRUPO.map((nombre, i) => ({ id: i + 1, nombre }));
+const grupoId = Object.fromEntries(NOMBRES_GRUPO.map((n, i) => [n, i + 1]));
 
-const grupos = GRUPOS.map((g, i) => ({ id: i + 1, nombre: g.nombre }));
+// Clasificaciones (solo membresias; el trigger calcula las estadisticas)
 const clasificaciones = [];
-const partidos = [];
-let clasId = 1, partidoId = 1, globalMatch = 0;
-const verificacion = [];
-
-GRUPOS.forEach((g, gi) => {
-  const ids = g.equipos.map((t) => nombreToId.get(t.n));
-  ids.forEach((idSel) => clasificaciones.push({ id: clasId++, id_grupo: gi + 1, id_seleccion: idSel }));
-
-  const sol = resolverGrupo(g.equipos);
-  if (!sol) throw new Error(`No se pudo reconstruir el grupo ${g.nombre}`);
-  const completo = g.equipos[0].pj === 3;
-
-  // Partidos jugados
-  sol.jugados.forEach((m, idx) => {
-    const ronda = completo ? rondaDePar(m.a, m.b) : (idx < 2 ? 1 : 2);
-    // 3a jornada: grupos A-C el 24/06, grupos D-F el 26/06
-    const fechaMD3 = gi < 3 ? '2026-06-24' : '2026-06-26';
-    const fecha = ronda <= 2 ? FECHAS[ronda][gi % 4] : fechaMD3;
-    partidos.push({
-      id: partidoId++, id_grupo: gi + 1, local: ids[m.a], visit: ids[m.b],
-      gl: m.sa, gv: m.sb, fecha, horario: horarios[globalMatch % 4],
-      id_estadio: (globalMatch % estadios.length) + 1, jugado: true,
-    });
-    globalMatch++;
-  });
-  // Partidos programados (3a jornada de los grupos con pj=2): aun no jugados
-  sol.noJugados.forEach((par) => {
-    partidos.push({
-      id: partidoId++, id_grupo: gi + 1, local: ids[par[0]], visit: ids[par[1]],
-      gl: null, gv: null, fecha: '2026-06-27', horario: horarios[globalMatch % 4],
-      id_estadio: (globalMatch % estadios.length) + 1, jugado: false,
-    });
-    globalMatch++;
-  });
-
-  // Verificacion: recomputar posiciones desde los partidos jugados
-  const calc = g.equipos.map((t) => ({ n: t.n, pj: 0, w: 0, d: 0, l: 0, gf: 0, gc: 0 }));
-  const idx = Object.fromEntries(g.equipos.map((t, i) => [ids[i], i]));
-  for (const p of partidos.filter((x) => x.id_grupo === gi + 1 && x.jugado)) {
-    const L = calc[idx[p.local]], V = calc[idx[p.visit]];
-    L.pj++; V.pj++; L.gf += p.gl; L.gc += p.gv; V.gf += p.gv; V.gc += p.gl;
-    if (p.gl > p.gv) { L.w++; V.l++; } else if (p.gl < p.gv) { L.l++; V.w++; } else { L.d++; V.d++; }
+let clasId = 1;
+for (const g of NOMBRES_GRUPO) {
+  for (const n of GRUPOS_TEAMS[g]) {
+    clasificaciones.push({ id: clasId++, id_grupo: grupoId[g], id_seleccion: nombreToId.get(n) });
   }
-  g.equipos.forEach((t, i) => {
-    const c = calc[i];
-    const ok = c.pj === t.pj && c.w === t.w && c.d === t.d && c.l === t.l && c.gf === t.gf && c.gc === t.gc;
-    verificacion.push({ grupo: g.nombre, equipo: t.n, ok, esperado: `${t.w}-${t.d}-${t.l} ${t.gf}:${t.gc}`, obtenido: `${c.w}-${c.d}-${c.l} ${c.gf}:${c.gc}` });
-  });
+}
+
+// Partidos de la fase de grupos (todos jugados; el torneo ya llego a la fase final)
+const horariosG = ['12:00', '15:00', '18:00', '21:00'];
+const partidos = PARTIDOS_G.map((p, i) => {
+  const [g, home, gl, gv, away, fecha, est] = p;
+  return {
+    id: i + 1, id_grupo: grupoId[g],
+    local: nombreToId.get(home), visit: nombreToId.get(away),
+    gl, gv, fecha, horario: horariosG[i % 4], id_estadio: est, jugado: true,
+  };
 });
 
-function rondaDePar(a, b) {
-  const key = `${a}${b}`;
-  return { '01': 1, '23': 1, '02': 2, '13': 2, '03': 3, '12': 3 }[key];
+// Verificacion: los resultados reales deben reproducir las posiciones oficiales
+const verificacion = [];
+for (const g of NOMBRES_GRUPO) {
+  const st = {};
+  const add = (t) => (st[t] ||= { gf: 0, ga: 0, pts: 0 });
+  for (const [, home, gl, gv, away] of PARTIDOS_G.filter((x) => x[0] === g)) {
+    const H = add(home), A = add(away);
+    H.gf += gl; H.ga += gv; A.gf += gv; A.ga += gl;
+    if (gl > gv) H.pts += 3; else if (gl < gv) A.pts += 3; else { H.pts++; A.pts++; }
+  }
+  for (const n of GRUPOS_TEAMS[g]) {
+    const gd = st[n].gf - st[n].ga, pts = st[n].pts;
+    const [tgd, tpts] = TARGET_POS[n];
+    const ok = gd === tgd && pts === tpts;
+    verificacion.push({ grupo: g, equipo: n, ok, esperado: `GD ${tgd} Pts ${tpts}`, obtenido: `GD ${gd} Pts ${pts}` });
+  }
 }
 
 // ============================================================================
@@ -315,12 +291,87 @@ for (let i = 0; i < 20; i++) {
     dia: diasSemana[i % diasSemana.length], fecha: p.fecha, horario: p.horario, costo: costos[i % costos.length] });
 }
 
+// ============================================================================
+//  FASE FINAL  -  Cuadro REAL al 01/07/2026 (aportado por la fuente oficial).
+//  Ronda de 32 = Dieciseisavos. 8 partidos ya jugados (con marcadores y penales)
+//  + 8 programados. Octavos: 4 con equipos definidos + 4 por definir.
+//  Cuartos, Semifinal y Final: por definir (fechas/sedes ya asignadas).
+// ============================================================================
+const idSel = (n) => {
+  if (!n) return null;
+  const id = nombreToId.get(n);
+  if (!id) throw new Error(`FASE FINAL: no existe la seleccion '${n}'`);
+  return id;
+};
+// Sedes, fechas y horarios OFICIALES de la FIFA (calendario Mundial 2026).
+// Cada estadio es el real de la sede; el horario es la hora LOCAL de la sede.
+// Estadios (id): 1 Azteca, 2 Akron, 3 BBVA, 4 BMO Field, 5 BC Place, 6 SoFi,
+// 7 MetLife, 8 AT&T, 9 Mercedes-Benz, 10 Hard Rock, 11 NRG, 12 Arrowhead,
+// 13 Lumen Field, 14 Levi's, 15 Gillette, 16 Lincoln Financial.
+const faseFinal = [];
+let ffId = 1;
+const addFF = (nombre_fase, llave, local, visit, fecha, horario, id_estadio, res) => {
+  faseFinal.push({
+    id: ffId++, nombre_fase, llave,
+    local: idSel(local), visit: idSel(visit),
+    id_estadio, fecha, horario,
+    gl: res ? res[0] : null, gv: res ? res[1] : null,
+    pl: res && res.length > 2 ? res[2] : null,
+    pv: res && res.length > 2 ? res[3] : null,
+    jugado: !!res,
+  });
+};
+
+// --- Dieciseisavos (Ronda de 32) --- sedes/fechas oficiales FIFA
+addFF('Dieciseisavos', 'D1', 'Alemania', 'Paraguay', '2026-06-29', '16:30', 15, [1, 1, 3, 4]);
+addFF('Dieciseisavos', 'D2', 'Francia', 'Suecia', '2026-06-30', '17:00', 7, [3, 0]);
+addFF('Dieciseisavos', 'D3', 'Sudafrica', 'Canada', '2026-06-28', '12:00', 6, [0, 1]);
+addFF('Dieciseisavos', 'D4', 'Paises Bajos', 'Marruecos', '2026-06-29', '19:00', 3, [1, 1, 2, 3]);
+addFF('Dieciseisavos', 'D5', 'Portugal', 'Croacia', '2026-07-02', '19:00', 4);
+addFF('Dieciseisavos', 'D6', 'Espana', 'Austria', '2026-07-02', '15:00', 6);
+addFF('Dieciseisavos', 'D7', 'Estados Unidos', 'Bosnia y Herzegovina', '2026-07-01', '20:00', 14);
+addFF('Dieciseisavos', 'D8', 'Belgica', 'Senegal', '2026-07-01', '16:00', 13);
+addFF('Dieciseisavos', 'D9', 'Brasil', 'Japon', '2026-06-29', '12:00', 11, [2, 1]);
+addFF('Dieciseisavos', 'D10', 'Costa de Marfil', 'Noruega', '2026-06-30', '12:00', 8, [1, 2]);
+addFF('Dieciseisavos', 'D11', 'Mexico', 'Ecuador', '2026-06-30', '15:00', 1, [2, 0]);
+addFF('Dieciseisavos', 'D12', 'Inglaterra', 'Republica Democratica del Congo', '2026-07-01', '12:00', 9, [2, 1]);
+addFF('Dieciseisavos', 'D13', 'Argentina', 'Cabo Verde', '2026-07-03', '18:00', 10);
+addFF('Dieciseisavos', 'D14', 'Australia', 'Egipto', '2026-07-03', '14:00', 8);
+addFF('Dieciseisavos', 'D15', 'Suiza', 'Argelia', '2026-07-02', '23:00', 5);
+addFF('Dieciseisavos', 'D16', 'Colombia', 'Ghana', '2026-07-03', '21:30', 12);
+
+// --- Octavos (Ronda de 16) --- 4 con equipos definidos + 4 por definir
+addFF('Octavos', 'O1', 'Paraguay', 'Francia', '2026-07-04', '14:00', 16);
+addFF('Octavos', 'O2', 'Canada', 'Marruecos', '2026-07-04', '15:00', 11);
+addFF('Octavos', 'O3', null, null, '2026-07-06', '16:00', 10);   // Ganador D5 vs Ganador D6
+addFF('Octavos', 'O4', null, null, '2026-07-06', '19:00', 9);    // Ganador D7 vs Ganador D8
+addFF('Octavos', 'O5', 'Brasil', 'Noruega', '2026-07-05', '14:00', 8);
+addFF('Octavos', 'O6', 'Mexico', 'Inglaterra', '2026-07-05', '18:00', 1);
+addFF('Octavos', 'O7', null, null, '2026-07-07', '14:00', 5);    // Ganador D13 vs Ganador D14
+addFF('Octavos', 'O8', null, null, '2026-07-07', '18:00', 4);    // Ganador D15 vs Ganador D16
+
+// --- Cuartos de final --- (solo en Estados Unidos)
+addFF('Cuartos', 'C1', null, null, '2026-07-09', '15:00', 15);   // G(O1) vs G(O2)
+addFF('Cuartos', 'C2', null, null, '2026-07-10', '20:00', 6);    // G(O3) vs G(O4)
+addFF('Cuartos', 'C3', null, null, '2026-07-11', '15:00', 10);   // G(O5) vs G(O6)
+addFF('Cuartos', 'C4', null, null, '2026-07-11', '20:00', 12);   // G(O7) vs G(O8)
+
+// --- Semifinales ---
+addFF('Semifinal', 'S1', null, null, '2026-07-14', '19:00', 8);  // AT&T, Arlington
+addFF('Semifinal', 'S2', null, null, '2026-07-15', '19:00', 9);  // Mercedes-Benz, Atlanta
+
+// --- Tercer lugar ---
+addFF('Tercer Lugar', 'T1', null, null, '2026-07-18', '15:00', 10); // Hard Rock, Miami
+
+// --- Final ---
+addFF('Final', 'F1', null, null, '2026-07-19', '19:00', 7);      // MetLife, East Rutherford
+
 const L = [];
 L.push('-- ============================================================================');
-L.push('--  COPA MUNDIAL FIFA 2026  -  Datos REALES al 26/06/2026 (seed)');
+L.push('--  COPA MUNDIAL FIFA 2026  -  Datos REALES al 01/07/2026 (seed)');
 L.push('--  GENERADO por scripts/generar-datos-reales.mjs  (no editar a mano)');
-L.push(`--  48 selecciones | 16 estadios | 12 grupos | ${partidos.length} partidos (${jugados.length} jugados)`);
-L.push('--  Marcadores reconstruidos para reproducir las posiciones oficiales.');
+L.push(`--  48 selecciones | 16 estadios | 12 grupos | ${partidos.length} partidos de grupos + fase final`);
+L.push('--  Resultados y sedes reales (fuente: Wikipedia por grupo, verificado vs posiciones oficiales).');
 L.push('-- ============================================================================');
 L.push("SET client_encoding = 'UTF8';");
 L.push('BEGIN;');
@@ -329,7 +380,7 @@ L.push('-- 1) CONTINENTES');
 for (const c of CONTINENTES) L.push(`INSERT INTO continentes (id_continente, nombre, confederacion, descripcion) VALUES (${c.id}, ${q(c.nombre)}, ${q(c.confederacion)}, ${q(c.desc)});`);
 L.push('');
 L.push('-- 2) SELECCIONES (con geolocalizacion)');
-for (const s of selecciones) L.push(`INSERT INTO selecciones (id, nombre, id_continente, pais, capital, historia, ventajas, desventajas, ranking, bandera, latitud, longitud) VALUES (${s.id}, ${q(s.nombre)}, ${s.id_continente}, ${q(s.pais)}, ${q(s.capital)}, ${q(s.historia)}, ${q(s.ventajas)}, ${q(s.desventajas)}, ${num(s.ranking_fifa)}, ${q(s.bandera)}, ${num(s.latitud)}, ${num(s.longitud)});`);
+for (const s of selecciones) L.push(`INSERT INTO selecciones (id, nombre, id_continente, pais, capital, historia, ventajas, desventajas, entrenador, ranking, bandera, latitud, longitud) VALUES (${s.id}, ${q(s.nombre)}, ${s.id_continente}, ${q(s.pais)}, ${q(s.capital)}, ${q(s.historia)}, ${q(s.ventajas)}, ${q(s.desventajas)}, ${q(s.entrenador)}, ${num(s.ranking_fifa)}, ${q(s.bandera)}, ${num(s.latitud)}, ${num(s.longitud)});`);
 L.push('');
 L.push('-- 3) GRUPOS');
 for (const g of grupos) L.push(`INSERT INTO grupos (id, nombre) VALUES (${g.id}, ${q(g.nombre)});`);
@@ -347,6 +398,11 @@ for (const p of partidos) {
   L.push(`INSERT INTO partidos (id, fase, id_grupo, id_equipo_local, id_equipo_visitante, goles_local, goles_visitante, fecha, horario, id_estadio, jugado) VALUES (${p.id}, 'Grupos', ${p.id_grupo}, ${p.local}, ${p.visit}, ${gl}, ${gv}, '${p.fecha}', '${p.horario}', ${p.id_estadio}, ${p.jugado ? 'TRUE' : 'FALSE'});`);
 }
 L.push('');
+L.push('-- 7) FASE FINAL (cuadro real al 01/07/2026, sedes/fechas/horas OFICIALES FIFA)');
+for (const f of faseFinal) {
+  L.push(`INSERT INTO fase_final (id, nombre_fase, llave, id_seleccion_local, id_seleccion_visitante, id_estadio, fecha, horario, goles_local, goles_visitante, penales_local, penales_visitante, jugado) VALUES (${f.id}, ${q(f.nombre_fase)}, ${q(f.llave)}, ${f.local ?? 'NULL'}, ${f.visit ?? 'NULL'}, ${f.id_estadio}, '${f.fecha}', '${f.horario}', ${num(f.gl)}, ${num(f.gv)}, ${num(f.pl)}, ${num(f.pv)}, ${f.jugado ? 'TRUE' : 'FALSE'});`);
+}
+L.push('');
 L.push('-- 8) USUARIOS');
 usuarios.forEach((u, i) => L.push(`INSERT INTO usuarios (id, nombre, email) VALUES (${i + 1}, ${q(u[0])}, ${q(u[1])});`));
 L.push('');
@@ -355,7 +411,8 @@ for (const b of boletos) L.push(`INSERT INTO boletos (id, id_usuario, id_estadio
 L.push('');
 const seqs = [['continentes_id_continente_seq', 'continentes', 'id_continente'], ['selecciones_id_seq', 'selecciones', 'id'],
   ['grupos_id_seq', 'grupos', 'id'], ['estadios_id_seq', 'estadios', 'id'], ['clasificaciones_id_seq', 'clasificaciones', 'id'],
-  ['partidos_id_seq', 'partidos', 'id'], ['usuarios_id_seq', 'usuarios', 'id'], ['boletos_id_seq', 'boletos', 'id']];
+  ['partidos_id_seq', 'partidos', 'id'], ['fase_final_id_seq', 'fase_final', 'id'],
+  ['usuarios_id_seq', 'usuarios', 'id'], ['boletos_id_seq', 'boletos', 'id']];
 L.push('-- Reajustar secuencias');
 for (const [s, t, c] of seqs) L.push(`SELECT setval('${s}', (SELECT COALESCE(MAX(${c}),1) FROM ${t}));`);
 L.push('');
@@ -369,14 +426,15 @@ for (const s of selecciones) {
   const cf = s.confederacion;
   (porConf[cf] ||= { confederacion: cf, continente: CONF[cf].cont, equipos: [] }).equipos.push({
     nombre: s.nombre, pais: s.pais, capital: s.capital, latitud: s.latitud, longitud: s.longitud,
-    ranking_fifa: s.ranking_fifa, historia: s.historia, ventajas: s.ventajas, desventajas: s.desventajas, bandera: s.bandera,
+    ranking_fifa: s.ranking_fifa, historia: s.historia, ventajas: s.ventajas, desventajas: s.desventajas,
+    entrenador: s.entrenador, bandera: s.bandera,
   });
 }
 const datasetReal = {
-  generado: 'Mundial 2026 real al 25/06/2026',
+  generado: 'Mundial 2026 real al 27/06/2026 (fase de grupos completa)',
   confederaciones: Object.values(porConf),
   estadios,
-  grupos: GRUPOS.map((g) => ({ nombre: g.nombre, equipos: g.equipos.map((t) => t.n) })),
+  grupos: NOMBRES_GRUPO.map((n) => ({ nombre: n, equipos: GRUPOS_TEAMS[n] })),
 };
 fs.writeFileSync(path.join(root, 'db', 'dataset.json'), JSON.stringify(datasetReal, null, 2));
 

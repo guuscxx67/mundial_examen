@@ -1,211 +1,598 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mundial FIFA 2026 - Simulacion, Administracion y Geolocalizacion</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="css/styles.css" />
-</head>
-<body>
-  <header class="topbar">
-    <div class="brand">
-      <span class="ball">⚽</span>
-      <div>
-        <h1>Copa Mundial FIFA 2026</h1>
-        <small>Simulacion · Administracion · Geolocalizacion</small>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Mundial FIFA 2026 - Simulacion, Administracion y Geolocalizacion
+    </title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/css/flag-icons.min.css"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="ball"><i class="fa-solid fa-futbol"></i></span>
+        <div>
+          <h1>Copa Mundial FIFA 2026</h1>
+          <small>
+            <span class="fi fi-mx"></span> México ·
+            <span class="fi fi-us"></span> Estados Unidos ·
+            <span class="fi fi-ca"></span> Canadá — Simulación · Administración
+            · Geolocalización
+          </small>
+        </div>
       </div>
-    </div>
-    <nav class="tabs">
-      <button class="tab active" data-view="resumen">Resumen</button>
-      <button class="tab" data-view="selecciones">Selecciones</button>
-      <button class="tab" data-view="grupos">Grupos</button>
-      <button class="tab" data-view="estadios">Estadios y Mapa</button>
-      <button class="tab" data-view="partidos">Partidos</button>
-      <button class="tab" data-view="fasefinal">Fase Final</button>
-      <button class="tab" data-view="boletos">Boletos</button>
-    </nav>
-  </header>
+      <nav class="tabs" id="nav">
+        <button class="tab active" data-view="inicio">
+          <i class="fa-solid fa-house"></i> Inicio
+        </button>
+        <button class="tab" data-view="confederaciones">
+          <i class="fa-solid fa-earth-americas"></i> Confederaciones
+        </button>
+        <button class="tab" data-view="selecciones">
+          <i class="fa-solid fa-shirt"></i> Selecciones
+        </button>
+        <button class="tab" data-view="grupos">
+          <i class="fa-solid fa-table-cells-large"></i> Grupos
+        </button>
+        <button class="tab" data-view="calendario">
+          <i class="fa-solid fa-calendar-days"></i> Calendario
+        </button>
+        <button class="tab" data-view="clasificacion">
+          <i class="fa-solid fa-ranking-star"></i> Clasificación
+        </button>
+        <button class="tab" data-view="simulador">
+          <i class="fa-solid fa-gamepad"></i> Simulador
+        </button>
+        <button class="tab" data-view="fasefinal">
+          <i class="fa-solid fa-trophy"></i> Fase Final
+        </button>
+        <button class="tab" data-view="estadios">
+          <i class="fa-solid fa-location-dot"></i> Estadios
+        </button>
+        <button class="tab" data-view="geo">
+          <i class="fa-solid fa-map-location-dot"></i> Geolocalización
+        </button>
+        <button class="tab" data-view="boletos">
+          <i class="fa-solid fa-ticket"></i> Boletos
+        </button>
+        <button class="tab" data-view="admin">
+          <i class="fa-solid fa-gear"></i> Administrador
+        </button>
+        <button class="tab" data-view="acerca">
+          <i class="fa-solid fa-circle-info"></i> Acerca
+        </button>
+      </nav>
+    </header>
 
-  <main id="app">
-    <!-- RESUMEN -->
-    <section class="view active" id="view-resumen">
-      <h2>Resumen del torneo</h2>
-      <div id="cards-resumen" class="cards"></div>
-      <div class="grid-2">
-        <div class="panel">
-          <h3>Maximos goleadores (selecciones)</h3>
-          <div id="tabla-goleadores"></div>
+    <main id="app">
+      <!-- ============================ 1. INICIO ============================ -->
+      <section class="view active" id="view-inicio">
+        <div class="hero">
+          <div class="hero-logo"><i class="fa-solid fa-futbol"></i></div>
+          <h2 class="hero-title">Copa Mundial de la FIFA 2026</h2>
+          <p class="hero-sub">
+            El primer Mundial con 48 selecciones, organizado por tres países
+            anfitriones.
+          </p>
+          <div class="sedes">
+            <div class="sede-pill"><span class="fi fi-mx"></span> México</div>
+            <div class="sede-pill">
+              <span class="fi fi-us"></span> Estados Unidos
+            </div>
+            <div class="sede-pill"><span class="fi fi-ca"></span> Canadá</div>
+          </div>
         </div>
-        <div class="panel">
-          <h3>Rendimiento por confederacion</h3>
-          <div id="tabla-confed"></div>
-        </div>
-      </div>
-    </section>
 
-    <!-- SELECCIONES -->
-    <section class="view" id="view-selecciones">
-      <h2>Selecciones</h2>
-      <div class="grid-2">
-        <div class="panel">
-          <h3>Top 10 del ranking FIFA</h3>
-          <div id="tabla-ranking"></div>
-        </div>
-        <div class="panel">
-          <h3>Alta de seleccion (equipo)</h3>
-          <form id="form-seleccion" class="form">
-            <input name="nombre" placeholder="Nombre de la seleccion" required />
-            <input name="pais" placeholder="Pais" required />
-            <select name="id_continente" required></select>
-            <input name="capital" placeholder="Capital" />
-            <input name="ranking" type="number" min="1" placeholder="Ranking FIFA" />
-            <input name="bandera" placeholder="Bandera (emoji)" maxlength="8" />
-            <input name="latitud" type="number" step="0.000001" placeholder="Latitud" />
-            <input name="longitud" type="number" step="0.000001" placeholder="Longitud" />
-            <button type="submit">Agregar seleccion</button>
-          </form>
-        </div>
-      </div>
-      <div class="panel">
-        <h3>Listado completo (<span id="conteo-selecciones">0</span>)</h3>
-        <div id="tabla-selecciones"></div>
-      </div>
-    </section>
+        <div class="cards" id="cards-inicio"></div>
 
-    <!-- GRUPOS -->
-    <section class="view" id="view-grupos">
-      <h2>Grupos y Clasificacion</h2>
-      <div class="selector-grupos" id="selector-grupos"></div>
-      <div class="grid-2">
+        <div class="grid-2">
+          <div class="panel">
+            <h3><i class="fa-solid fa-film"></i> Video introductorio</h3>
+            <div id="video-intro" class="video-wrap"></div>
+            <form
+              id="form-video"
+              class="form-inline"
+              style="margin-top: 0.6rem"
+            >
+              <input
+                id="video-url"
+                placeholder="Pega una URL o ID de YouTube (opcional)"
+              />
+              <button type="submit">Reproducir</button>
+            </form>
+          </div>
+          <div class="panel">
+            <h3><i class="fa-solid fa-newspaper"></i> Noticias del torneo</h3>
+            <div id="noticias"></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>
+            <i class="fa-solid fa-location-dot"></i> Estadios sede destacados
+          </h3>
+          <div id="inicio-estadios" class="mini-grid"></div>
+        </div>
+
+        <div class="panel">
+          <h3><i class="fa-solid fa-users"></i> Equipos participantes (48)</h3>
+          <div id="inicio-equipos" class="flag-cloud"></div>
+        </div>
+      </section>
+
+      <!-- ======================= 2. CONFEDERACIONES ======================= -->
+      <section class="view" id="view-confederaciones">
+        <h2>Confederaciones por FIFA</h2>
+        <p class="hint">
+          Elige una confederación y luego una selección para ver su ficha
+          completa.
+        </p>
+        <div class="conf-tabs" id="conf-tabs"></div>
+        <div id="conf-equipos" class="team-grid"></div>
+      </section>
+
+      <!-- ========================= 3. SELECCIONES ========================= -->
+      <section class="view" id="view-selecciones">
+        <h2>Selecciones</h2>
+        <div class="grid-2">
+          <div class="panel">
+            <h3><i class="fa-solid fa-medal"></i> Top 10 del ranking FIFA</h3>
+            <div id="tabla-ranking"></div>
+          </div>
+          <div class="panel">
+            <h3>
+              <i class="fa-solid fa-magnifying-glass"></i> Buscar selección
+            </h3>
+            <input
+              id="buscar-seleccion"
+              placeholder="Escribe un país, selección o confederación..."
+              style="width: 100%"
+            />
+            <p class="hint">
+              Total de selecciones participantes:
+              <b id="conteo-selecciones">0</b>
+            </p>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Listado completo</h3>
+          <div id="tabla-selecciones"></div>
+        </div>
+      </section>
+
+      <!-- ============================ 4. GRUPOS =========================== -->
+      <section class="view" id="view-grupos">
+        <h2>Grupos del Mundial 2026</h2>
+        <div class="selector-grupos" id="selector-grupos"></div>
         <div class="panel">
           <div class="panel-head">
             <h3 id="titulo-grupo">Grupo A</h3>
             <div class="share" id="share-grupo"></div>
           </div>
           <div id="tabla-grupo"></div>
+          <p class="hint">
+            Los <span class="leyenda-clasifica">2 primeros</span> de cada grupo
+            avanzan directamente; los mejores terceros completan los 32.
+          </p>
         </div>
         <div class="panel">
-          <h3>Asignar seleccion al grupo</h3>
-          <form id="form-asignar" class="form">
-            <select name="id_seleccion" id="sel-asignar" required></select>
-            <button type="submit">Asignar al grupo seleccionado</button>
-          </form>
-          <h3 style="margin-top:1rem">Compartir clasificacion general</h3>
-          <div class="share" id="share-clasificacion"></div>
+          <div class="panel-head">
+            <h3>Partidos del grupo</h3>
+          </div>
+          <div id="tabla-grupo-partidos"></div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ESTADIOS Y MAPA -->
-    <section class="view" id="view-estadios">
-      <h2>Estadios y Geolocalizacion</h2>
-      <div id="mapa"></div>
-      <div class="grid-2">
+      <!-- ========================== 5. CALENDARIO ========================= -->
+      <section class="view" id="view-calendario">
+        <h2>Calendario de partidos</h2>
+        <div class="form-inline" style="margin-bottom: 1rem">
+          <label
+            >Fase:
+            <select id="cal-fase">
+              <option value="">Todas</option>
+              <option value="Grupos">Fase de grupos</option>
+              <option value="Dieciseisavos">Dieciseisavos</option>
+              <option value="Octavos">Octavos</option>
+              <option value="Cuartos">Cuartos</option>
+              <option value="Semifinal">Semifinal</option>
+              <option value="Final">Final</option>
+            </select>
+          </label>
+          <label
+            >Estado:
+            <select id="cal-estado">
+              <option value="">Todos</option>
+              <option value="jugado">Jugados</option>
+              <option value="programado">Programados</option>
+            </select>
+          </label>
+        </div>
+        <div id="calendario"></div>
+      </section>
+
+      <!-- ========================= 6. CLASIFICACION ======================= -->
+      <section class="view" id="view-clasificacion">
+        <h2>Clasificación general</h2>
         <div class="panel">
-          <h3>Estadios sede (<span id="conteo-estadios">0</span>)</h3>
-          <div id="tabla-estadios"></div>
+          <div class="panel-head">
+            <h3>Todos los grupos (ordenados por posición)</h3>
+            <div class="share" id="share-clasificacion"></div>
+          </div>
+          <div id="tabla-clasificacion-general"></div>
         </div>
         <div class="panel">
-          <h3>Alta de estadio</h3>
-          <form id="form-estadio" class="form">
-            <input name="nombre" placeholder="Nombre del estadio" required />
-            <input name="ciudad" placeholder="Ciudad" required />
-            <input name="pais" placeholder="Pais" required />
-            <input name="latitud" type="number" step="0.000001" placeholder="Latitud" required />
-            <input name="longitud" type="number" step="0.000001" placeholder="Longitud" required />
-            <input name="capacidad" type="number" min="1" placeholder="Capacidad" />
-            <button type="submit">Agregar estadio</button>
-          </form>
-          <h3 style="margin-top:1rem">Compartir ruta a un estadio</h3>
+          <h3>
+            <i class="fa-solid fa-circle-check"></i> Clasificados a la fase
+            final
+          </h3>
+          <div id="tabla-clasificados"></div>
+        </div>
+      </section>
+
+      <!-- ========================== 7. SIMULADOR ========================= -->
+      <section class="view" id="view-simulador">
+        <h2>Simulador de resultados</h2>
+        <div class="grid-2">
+          <div class="panel">
+            <h3>
+              <i class="fa-solid fa-futbol"></i> Registrar / simular un
+              resultado
+            </h3>
+            <form id="form-resultado" class="form">
+              <select name="id" id="res-partido" required></select>
+              <div class="form-inline">
+                <input
+                  name="goles_local"
+                  type="number"
+                  min="0"
+                  placeholder="Goles local"
+                  required
+                />
+                <span>-</span>
+                <input
+                  name="goles_visitante"
+                  type="number"
+                  min="0"
+                  placeholder="Goles visitante"
+                  required
+                />
+              </div>
+              <button type="submit">Guardar resultado</button>
+            </form>
+            <p class="hint">
+              Al guardar, el <b>trigger</b> de la base de datos recalcula
+              automáticamente la tabla de posiciones del grupo.
+            </p>
+          </div>
+          <div class="panel">
+            <h3><i class="fa-solid fa-dice"></i> Simulación automática</h3>
+            <p class="hint">
+              Genera marcadores aleatorios para todos los partidos de grupos aún
+              no jugados y recalcula la clasificación.
+            </p>
+            <button id="btn-simular-todo" class="btn-primary">
+              Simular partidos pendientes
+            </button>
+            <h3 style="margin-top: 1rem">
+              <i class="fa-solid fa-trophy"></i> Fase final
+            </h3>
+            <p class="hint">
+              Cuando los 32 clasificados estén definidos, genera el cuadro con
+              sedes automáticas.
+            </p>
+            <button id="btn-generar-fasefinal-sim" class="btn-primary">
+              Generar fase final
+            </button>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Partidos pendientes</h3>
+          <div id="tabla-pendientes"></div>
+        </div>
+      </section>
+
+      <!-- ========================== 8. FASE FINAL ======================== -->
+      <section class="view" id="view-fasefinal">
+        <h2>Fase Final (eliminatorias)</h2>
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Cuadro de eliminatorias</h3>
+            <button id="btn-generar-fasefinal" class="btn-primary">
+              Generar / regenerar cuadro
+            </button>
+          </div>
+          <p class="hint">
+            Clasifican los 2 primeros de cada grupo (24) + los 8 mejores
+            terceros = <b>32 selecciones</b>. Las sedes se asignan
+            <b>automáticamente</b>.
+          </p>
+        </div>
+        <div id="bracket-rondas"></div>
+      </section>
+
+      <!-- =========================== 9. ESTADIOS ========================= -->
+      <section class="view" id="view-estadios">
+        <h2>Ubicaciones de los estadios</h2>
+        <p class="hint">
+          Haz clic en un estadio para ver equipos, fechas, horarios y costo de
+          boletos.
+        </p>
+        <div id="estadios-grid" class="estadio-grid"></div>
+      </section>
+
+      <!-- ======================= 10. GEOLOCALIZACION ===================== -->
+      <section class="view" id="view-geo">
+        <h2>Geolocalización</h2>
+        <div class="map-controls">
+          <label
+            ><input type="checkbox" id="chk-estadios" checked />
+            <i class="fa-solid fa-location-dot"></i> Estadios</label
+          >
+          <label
+            ><input type="checkbox" id="chk-capitales" checked />
+            <i class="fa-solid fa-flag"></i> Capitales de selecciones</label
+          >
+        </div>
+        <div id="mapa"></div>
+        <div class="panel">
+          <h3><i class="fa-solid fa-compass"></i> Cómo llegar a un estadio</h3>
           <form id="form-ruta" class="form-inline">
             <select name="estadio" id="ruta-estadio"></select>
-            <button type="button" id="btn-mi-ubicacion">Usar mi ubicacion</button>
+            <button type="button" id="btn-mi-ubicacion">
+              Usar mi ubicación
+            </button>
           </form>
-          <div class="share" id="share-ruta"></div>
+          <div class="share" id="share-ruta" style="margin-top: 0.6rem"></div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- PARTIDOS -->
-    <section class="view" id="view-partidos">
-      <h2>Partidos</h2>
-      <div class="grid-2">
-        <div class="panel">
-          <h3>Alta de partido</h3>
-          <form id="form-partido" class="form">
-            <select name="id_grupo" id="part-grupo"></select>
-            <select name="id_equipo_local" id="part-local" required></select>
-            <select name="id_equipo_visitante" id="part-visitante" required></select>
-            <select name="id_estadio" id="part-estadio"></select>
-            <input name="fecha" type="date" />
-            <input name="horario" type="time" />
-            <button type="submit">Programar partido</button>
-          </form>
-        </div>
-        <div class="panel">
-          <h3>Registrar resultado</h3>
-          <form id="form-resultado" class="form">
-            <select name="id" id="res-partido" required></select>
-            <div class="form-inline">
-              <input name="goles_local" type="number" min="0" placeholder="Goles local" required />
-              <input name="goles_visitante" type="number" min="0" placeholder="Goles visitante" required />
-            </div>
-            <button type="submit">Guardar resultado</button>
-          </form>
-          <p class="hint">Al guardar, el trigger de la BD recalcula la tabla de posiciones del grupo.</p>
-        </div>
-      </div>
-      <div class="panel">
-        <h3>Calendario / Resultados</h3>
-        <div id="tabla-partidos"></div>
-      </div>
-    </section>
-
-    <!-- FASE FINAL -->
-    <section class="view" id="view-fasefinal">
-      <h2>Fase Final (eliminatorias)</h2>
-      <div class="panel">
-        <p>Tras la fase de grupos, las sedes se asignan <strong>automaticamente</strong>.</p>
-        <button id="btn-generar-fasefinal" class="btn-primary">Generar cuadro con sedes automaticas</button>
-        <div id="bracket"></div>
-      </div>
-    </section>
-
-    <!-- BOLETOS -->
-    <section class="view" id="view-boletos">
-      <h2>Boletos</h2>
-      <div class="grid-2">
-        <div class="panel">
-          <h3>Alta de usuario</h3>
-          <form id="form-usuario" class="form">
-            <input name="nombre" placeholder="Nombre del usuario" required />
-            <input name="email" type="email" placeholder="Correo" />
-            <button type="submit">Agregar usuario</button>
-          </form>
+      <!-- =========================== 11. BOLETOS ========================= -->
+      <section class="view" id="view-boletos">
+        <h2>Boletos</h2>
+        <div class="grid-2">
+          <div class="panel">
+            <h3><i class="fa-solid fa-receipt"></i> Comprar boleto</h3>
+            <form id="form-boleto" class="form">
+              <select name="id_usuario" id="bol-usuario" required></select>
+              <select name="id_partido" id="bol-partido" required></select>
+              <input
+                name="costo"
+                type="number"
+                min="0"
+                step="0.01"
+                placeholder="Costo (se sugiere según la fase)"
+              />
+              <button type="submit">Comprar boleto</button>
+            </form>
+          </div>
+          <div class="panel">
+            <h3><i class="fa-solid fa-user-plus"></i> Nuevo usuario</h3>
+            <form id="form-usuario" class="form">
+              <input name="nombre" placeholder="Nombre del usuario" required />
+              <input
+                name="email"
+                type="email"
+                placeholder="Correo electrónico"
+              />
+              <button type="submit">Agregar usuario</button>
+            </form>
+          </div>
         </div>
         <div class="panel">
-          <h3>Alta de boleto</h3>
-          <form id="form-boleto" class="form">
-            <select name="id_usuario" id="bol-usuario" required></select>
-            <select name="id_partido" id="bol-partido" required></select>
-            <input name="costo" type="number" min="0" step="0.01" placeholder="Costo" />
-            <button type="submit">Comprar boleto</button>
-          </form>
+          <h3>Boletos vendidos</h3>
+          <div id="tabla-boletos"></div>
         </div>
-      </div>
-      <div class="panel">
-        <h3>Boletos vendidos</h3>
-        <div id="tabla-boletos"></div>
-      </div>
-    </section>
-  </main>
+      </section>
 
-  <div id="toast" class="toast"></div>
+      <!-- ========================= 12. ADMINISTRADOR ===================== -->
+      <section class="view" id="view-admin">
+        <h2>Administrador</h2>
+        <p class="hint">
+          Altas y gestión de los datos del torneo (CRUD sobre la base de datos
+          PostgreSQL).
+        </p>
+        <div class="grid-2">
+          <div class="panel">
+            <h3><i class="fa-solid fa-plus"></i> Alta de selección</h3>
+            <form id="form-seleccion" class="form">
+              <input
+                name="nombre"
+                placeholder="Nombre de la selección"
+                required
+              />
+              <input name="pais" placeholder="País" required />
+              <select name="id_continente" required></select>
+              <input name="capital" placeholder="Capital" />
+              <input name="entrenador" placeholder="Entrenador" />
+              <input
+                name="ranking"
+                type="number"
+                min="1"
+                placeholder="Ranking FIFA"
+              />
+              <input
+                name="bandera"
+                placeholder="Bandera (emoji)"
+                maxlength="8"
+              />
+              <div class="form-inline">
+                <input
+                  name="latitud"
+                  type="number"
+                  step="0.000001"
+                  placeholder="Latitud"
+                />
+                <input
+                  name="longitud"
+                  type="number"
+                  step="0.000001"
+                  placeholder="Longitud"
+                />
+              </div>
+              <button type="submit">Agregar selección</button>
+            </form>
+          </div>
+          <div class="panel">
+            <h3><i class="fa-solid fa-location-dot"></i> Alta de estadio</h3>
+            <form id="form-estadio" class="form">
+              <input name="nombre" placeholder="Nombre del estadio" required />
+              <input name="ciudad" placeholder="Ciudad" required />
+              <input name="pais" placeholder="País" required />
+              <div class="form-inline">
+                <input
+                  name="latitud"
+                  type="number"
+                  step="0.000001"
+                  placeholder="Latitud"
+                  required
+                />
+                <input
+                  name="longitud"
+                  type="number"
+                  step="0.000001"
+                  placeholder="Longitud"
+                  required
+                />
+              </div>
+              <input
+                name="capacidad"
+                type="number"
+                min="1"
+                placeholder="Capacidad"
+              />
+              <button type="submit">Agregar estadio</button>
+            </form>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="panel">
+            <h3>
+              <i class="fa-solid fa-table-cells-large"></i> Asignar selección a
+              un grupo
+            </h3>
+            <form id="form-asignar" class="form">
+              <select name="id_grupo" id="asig-grupo" required></select>
+              <select name="id_seleccion" id="sel-asignar" required></select>
+              <button type="submit">Asignar</button>
+            </form>
+          </div>
+          <div class="panel">
+            <h3><i class="fa-solid fa-calendar-plus"></i> Programar partido</h3>
+            <form id="form-partido" class="form">
+              <select name="id_grupo" id="part-grupo"></select>
+              <select name="id_equipo_local" id="part-local" required></select>
+              <select
+                name="id_equipo_visitante"
+                id="part-visitante"
+                required
+              ></select>
+              <select name="id_estadio" id="part-estadio"></select>
+              <div class="form-inline">
+                <input name="fecha" type="date" />
+                <input name="horario" type="time" />
+              </div>
+              <button type="submit">Programar partido</button>
+            </form>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Selecciones registradas (<span id="admin-conteo">0</span>)</h3>
+          </div>
+          <div id="admin-tabla-selecciones"></div>
+        </div>
+      </section>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="js/api.js"></script>
-  <script src="js/mapa.js"></script>
-  <script src="js/app.js"></script>
-</body>
+      <!-- =========================== 13. ACERCA ========================== -->
+      <section class="view" id="view-acerca">
+        <h2>Acerca del proyecto</h2>
+        <div class="panel">
+          <h3>
+            <i class="fa-solid fa-futbol"></i> Sistema del Mundial FIFA 2026
+          </h3>
+          <p>
+            Aplicación web full-stack para
+            <b>simular, administrar y geolocalizar</b> la Copa Mundial de la
+            FIFA 2026, disputada en México, Estados Unidos y Canadá. El mismo
+            frontend consume una API REST que puede respaldarse con
+            <b>MySQL, PostgreSQL o MongoDB</b>; este equipo utiliza
+            <b>PostgreSQL</b>.
+          </p>
+        </div>
+        <div class="grid-2">
+          <div class="panel">
+            <h3><i class="fa-solid fa-layer-group"></i> Stack tecnológico</h3>
+            <ul class="lista">
+              <li>
+                <b>Frontend:</b> HTML + CSS + JavaScript (vanilla) + Leaflet
+                (mapas)
+              </li>
+              <li><b>Backend:</b> Node.js + Express (API REST)</li>
+              <li><b>Base de datos:</b> PostgreSQL 16 (Docker)</li>
+              <li><b>POO:</b> modelos con clase base y herencia</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3><i class="fa-solid fa-puzzle-piece"></i> Módulos</h3>
+            <ol class="lista" id="lista-modulos"></ol>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>
+            <i class="fa-solid fa-clipboard-check"></i> Requisitos cubiertos
+          </h3>
+          <ul class="lista">
+            <li>
+              Menú de confederaciones (UEFA, CONMEBOL, CONCACAF, CAF, AFC, OFC)
+              con ficha emergente por selección.
+            </li>
+            <li>Grupos con tabla PJ · PG · PE · PP · GF · GC · DG · PT.</li>
+            <li>
+              Fase de dieciseisavos generada automáticamente con sedes
+              asignadas.
+            </li>
+            <li>
+              Estadios con ubicación en Google Maps, equipos, fechas, horarios y
+              costo de boletos.
+            </li>
+            <li>
+              Geolocalización con mapa interactivo, ruta y compartir en redes
+              sociales.
+            </li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <!-- Modal (ficha emergente de selección) -->
+    <div id="modal" class="modal">
+      <div class="modal-box">
+        <button class="modal-close" id="modal-close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div id="modal-content"></div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/mapa.js"></script>
+    <script src="js/app.js"></script>
+  </body>
 </html>

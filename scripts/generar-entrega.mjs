@@ -7,7 +7,13 @@ import { fileURLToPath } from 'node:url';
 import pg from 'pg';
 
 const { Pool } = pg;
-const pool = new Pool({ host: 'localhost', port: 55432, user: 'mundial', password: 'mundial2026', database: 'mundial2026' });
+const pool = new Pool({
+  host: process.env.PGHOST || 'localhost',
+  port: Number(process.env.PGPORT) || 55432,
+  user: process.env.PGUSER || 'mundial',
+  password: process.env.PGPASSWORD || 'mundial2026',
+  database: process.env.PGDATABASE || 'mundial2026',
+});
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, '..');
 const lee = (p) => fs.readFileSync(path.join(root, p), 'utf8');
@@ -168,7 +174,17 @@ const SECCION_4 = `## 4. Las 8 consultas solicitadas en clase (con resultados)\n
 const SECCION_5 = `## 5. Consultas adicionales (con resultados)\n\n${adicionales}\n`;
 
 const grupos = await seccionGrupos();
-const doc = PORTADA + '\n' + SECCION_BD + '\n' + SECCION_ER + grupos + SECCION_4 + SECCION_5;
+// Incrustar el script SQL completo de la base de datos dentro de la Seccion 1
+const schemaSQL = lee('db/schema.sql').trim();
+const SECCION_1 = SECCION_BD.replace(/\n---\n$/, '\n\n')
+  + '### Script SQL completo de creación de la base de datos (`schema.sql`)\n\n'
+  + 'A continuación se incluye el **script completo** que genera toda la base de datos en PostgreSQL '
+  + '(las 9 tablas con sus restricciones PK/FK/CHECK/UNIQUE, la columna generada, la función almacenada, '
+  + 'el disparador/trigger de clasificación y las vistas). Este mismo script se entrega como archivo '
+  + '`db/schema.sql`, y junto con los datos en `db/instalar.sql`.\n\n'
+  + '```sql\n' + schemaSQL + '\n```\n\n---\n\n';
+
+const doc = PORTADA + '\n' + SECCION_1 + SECCION_ER + grupos + SECCION_4 + SECCION_5;
 fs.writeFileSync(path.join(root, 'docs', 'entrega-1.md'), doc);
 console.log('docs/entrega-1.md generado:', doc.length, 'caracteres');
 await pool.end();

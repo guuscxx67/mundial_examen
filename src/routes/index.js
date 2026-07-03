@@ -35,6 +35,11 @@ api.use('/continentes', crudRouter(Continente, { orden: 'id_continente' }));
 api.get('/selecciones/detalle', wrap(async (req, res) => res.json(await Seleccion.conContinente())));
 api.get('/selecciones/ranking/top', wrap(async (req, res) =>
   res.json(await Seleccion.mejoresRankeados(Number(req.query.limite) || 10))));
+api.get('/selecciones/:id/perfil', wrap(async (req, res) => {
+  const perfil = await Seleccion.perfil(req.params.id);
+  if (!perfil) return res.status(404).json({ error: 'Seleccion no encontrada' });
+  res.json(perfil);
+}));
 api.use('/selecciones', crudRouter(Seleccion));
 
 // --------------------------------------------------------------------------

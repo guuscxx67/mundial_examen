@@ -63,13 +63,18 @@ COMMENT ON TABLE grupos IS '12 grupos de la fase de grupos';
 -- 4) ESTADIOS  (sedes en Mexico, Estados Unidos y Canada, con geolocalizacion)
 -- ============================================================================
 CREATE TABLE estadios (
-    id          SERIAL PRIMARY KEY,
-    nombre      VARCHAR(100) NOT NULL,
-    ciudad      VARCHAR(80)  NOT NULL,
-    pais        VARCHAR(60)  NOT NULL,
-    latitud     NUMERIC(9,6) NOT NULL,
-    longitud    NUMERIC(9,6) NOT NULL,
-    capacidad   INT          CHECK (capacidad > 0)
+    id              SERIAL PRIMARY KEY,
+    nombre          VARCHAR(100) NOT NULL,
+    ciudad          VARCHAR(80)  NOT NULL,
+    pais            VARCHAR(60)  NOT NULL,
+    latitud         NUMERIC(9,6) NOT NULL,
+    longitud        NUMERIC(9,6) NOT NULL,
+    capacidad       INT          CHECK (capacidad > 0),
+    descripcion     TEXT,                -- Resena / dato historico del estadio
+    anio_apertura   INT,                 -- Ano de inauguracion
+    superficie      VARCHAR(60),         -- Tipo de cesped
+    techo           VARCHAR(60),         -- Abierto / retractil / fijo
+    equipo_local    VARCHAR(120)         -- Club(es) que lo usan habitualmente
 );
 
 COMMENT ON TABLE estadios IS 'Estadios sede con geolocalizacion';

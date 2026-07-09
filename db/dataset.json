@@ -669,7 +669,12 @@
       "pais": "Mexico",
       "latitud": 19.302889,
       "longitud": -99.150528,
-      "capacidad": 80824
+      "capacidad": 80824,
+      "anio_apertura": 1966,
+      "superficie": "Cesped hibrido",
+      "techo": "Abierto",
+      "equipo_local": "Club America / Seleccion de Mexico",
+      "descripcion": "El Coloso de Santa Ursula es el unico estadio que ha albergado dos finales de Copa del Mundo (1970 y 1986). En 2026 hace historia al inaugurar su tercer Mundial. Aqui Maradona anoto la \"Mano de Dios\" y el \"Gol del Siglo\"."
     },
     {
       "nombre": "Estadio Akron",
@@ -677,7 +682,12 @@
       "pais": "Mexico",
       "latitud": 20.681944,
       "longitud": -103.462778,
-      "capacidad": 45664
+      "capacidad": 45664,
+      "anio_apertura": 2010,
+      "superficie": "Cesped hibrido",
+      "techo": "Abierto",
+      "equipo_local": "Chivas de Guadalajara",
+      "descripcion": "Conocido como \"El Templo Mayor\", su diseno emula un volcan cubierto de pasto que emerge del paisaje tapatio. Fue sede de los Juegos Panamericanos 2011 y de la Copa Oro."
     },
     {
       "nombre": "Estadio BBVA",
@@ -685,7 +695,12 @@
       "pais": "Mexico",
       "latitud": 25.669167,
       "longitud": -100.244722,
-      "capacidad": 51243
+      "capacidad": 51243,
+      "anio_apertura": 2015,
+      "superficie": "Cesped hibrido",
+      "techo": "Abierto",
+      "equipo_local": "CF Monterrey",
+      "descripcion": "\"El Gigante de Acero\" ofrece desde sus gradas una vista espectacular del Cerro de la Silla. Es considerado uno de los estadios mas modernos de America Latina."
     },
     {
       "nombre": "BMO Field",
@@ -693,7 +708,12 @@
       "pais": "Canada",
       "latitud": 43.633056,
       "longitud": -79.418611,
-      "capacidad": 43036
+      "capacidad": 43036,
+      "anio_apertura": 2007,
+      "superficie": "Cesped hibrido",
+      "techo": "Abierto (gradas techadas)",
+      "equipo_local": "Toronto FC",
+      "descripcion": "Primer estadio especifico de futbol en Canada. Se amplia a mas de 45,000 asientos para el Mundial 2026 y sera la casa de la seleccion canadiense en el torneo."
     },
     {
       "nombre": "BC Place",
@@ -701,7 +721,12 @@
       "pais": "Canada",
       "latitud": 49.276667,
       "longitud": -123.111944,
-      "capacidad": 52497
+      "capacidad": 52497,
+      "anio_apertura": 1983,
+      "superficie": "Cesped natural reforzado (instalado para 2026)",
+      "techo": "Retractil",
+      "equipo_local": "Vancouver Whitecaps FC",
+      "descripcion": "Posee el techo retractil soportado por cables mas grande del mundo. Fue sede de la final de la Copa Mundial Femenina 2015 y de las ceremonias olimpicas de Vancouver 2010."
     },
     {
       "nombre": "SoFi Stadium",
@@ -709,7 +734,12 @@
       "pais": "Estados Unidos",
       "latitud": 33.953333,
       "longitud": -118.339167,
-      "capacidad": 70492
+      "capacidad": 70492,
+      "anio_apertura": 2020,
+      "superficie": "Cesped natural (instalado para 2026)",
+      "techo": "Fijo translucido",
+      "equipo_local": "Los Angeles Rams / Chargers",
+      "descripcion": "El estadio mas caro jamas construido (~5,500 MDD). Su pantalla Infinity Screen de doble cara de 110 m es unica en el mundo. Sede del Super Bowl LVI y de los proximos Juegos Olimpicos de 2028."
     },
     {
       "nombre": "MetLife Stadium",
@@ -717,7 +747,12 @@
       "pais": "Estados Unidos",
       "latitud": 40.813611,
       "longitud": -74.074444,
-      "capacidad": 80663
+      "capacidad": 80663,
+      "anio_apertura": 2010,
+      "superficie": "Cesped natural (instalado para 2026)",
+      "techo": "Abierto",
+      "equipo_local": "New York Giants / New York Jets",
+      "descripcion": "Sede de la GRAN FINAL del Mundial 2026 el 19 de julio. Con mas de 82,000 asientos es el estadio de mayor aforo del torneo y ya albergo el Super Bowl XLVIII."
     },
     {
       "nombre": "AT&T Stadium",
@@ -725,7 +760,12 @@
       "pais": "Estados Unidos",
       "latitud": 32.747778,
       "longitud": -97.092778,
-      "capacidad": 70649
+      "capacidad": 70649,
+      "anio_apertura": 2009,
+      "superficie": "Cesped hibrido (instalado para 2026)",
+      "techo": "Retractil",
+      "equipo_local": "Dallas Cowboys",
+      "descripcion": "\"Jerry World\" tiene la pantalla colgante que fue la mas grande del mundo y un arco estructural de 275 m. Albergara 9 partidos, mas que ningun otro estadio del Mundial 2026."
     },
     {
       "nombre": "Mercedes-Benz Stadium",
@@ -733,7 +773,12 @@
       "pais": "Estados Unidos",
       "latitud": 33.755556,
       "longitud": -84.400833,
-      "capacidad": 68239
+      "capacidad": 68239,
+      "anio_apertura": 2017,
+      "superficie": "Cesped artificial FieldTurf (natural para 2026)",
+      "techo": "Retractil de 8 paneles",
+      "equipo_local": "Atlanta United FC / Atlanta Falcons",
+      "descripcion": "Su techo retractil de ocho paneles se abre como el obturador de una camara. Atlanta United impone records de asistencia de la MLS en este recinto certificado LEED Platinum."
     },
     {
       "nombre": "Hard Rock Stadium",
@@ -741,7 +786,12 @@
       "pais": "Estados Unidos",
       "latitud": 25.957958,
       "longitud": -80.238889,
-      "capacidad": 64478
+      "capacidad": 64478,
+      "anio_apertura": 1987,
+      "superficie": "Cesped natural",
+      "techo": "Parcial (cubre las gradas)",
+      "equipo_local": "Miami Dolphins",
+      "descripcion": "Ha recibido 6 Super Bowls, la final de la Copa America 2024 y es sede del GP de F1 de Miami. Su lona techa las gradas dejando el terreno al aire libre."
     },
     {
       "nombre": "NRG Stadium",
@@ -749,7 +799,12 @@
       "pais": "Estados Unidos",
       "latitud": 29.684722,
       "longitud": -95.410833,
-      "capacidad": 68777
+      "capacidad": 68777,
+      "anio_apertura": 2002,
+      "superficie": "Cesped natural (instalado para 2026)",
+      "techo": "Retractil",
+      "equipo_local": "Houston Texans",
+      "descripcion": "Fue el primer estadio de la NFL con techo retractil. Ha sido sede de dos Super Bowls y de multiples partidos de la seleccion mexicana en Estados Unidos."
     },
     {
       "nombre": "Arrowhead Stadium",
@@ -757,7 +812,12 @@
       "pais": "Estados Unidos",
       "latitud": 39.048889,
       "longitud": -94.483889,
-      "capacidad": 69045
+      "capacidad": 69045,
+      "anio_apertura": 1972,
+      "superficie": "Cesped natural",
+      "techo": "Abierto",
+      "equipo_local": "Kansas City Chiefs",
+      "descripcion": "Ostenta el record Guinness de ruido en un estadio: 142.2 decibeles. La casa de los Chiefs, campeones del Super Bowl, es famosa por su ambiente intimidante."
     },
     {
       "nombre": "Lumen Field",
@@ -765,7 +825,12 @@
       "pais": "Estados Unidos",
       "latitud": 47.595278,
       "longitud": -122.331667,
-      "capacidad": 66925
+      "capacidad": 66925,
+      "anio_apertura": 2002,
+      "superficie": "Cesped artificial (natural para 2026)",
+      "techo": "Parcial (cubre 70% de gradas)",
+      "equipo_local": "Seattle Sounders FC / Seahawks",
+      "descripcion": "Disenado para amplificar el ruido de la aficion, provoca mas salidas en falso de rivales que ningun otro estadio. Los Sounders son de los clubes con mas asistencia de la MLS."
     },
     {
       "nombre": "Levi's Stadium",
@@ -773,7 +838,12 @@
       "pais": "Estados Unidos",
       "latitud": 37.403,
       "longitud": -121.969722,
-      "capacidad": 68827
+      "capacidad": 68827,
+      "anio_apertura": 2014,
+      "superficie": "Cesped natural",
+      "techo": "Abierto",
+      "equipo_local": "San Francisco 49ers",
+      "descripcion": "En pleno Silicon Valley, es de los estadios mas tecnologicos del mundo: primer estadio de la NFL con certificacion LEED Gold. Sede del Super Bowl 50 y de la Copa America 2016."
     },
     {
       "nombre": "Gillette Stadium",
@@ -781,7 +851,12 @@
       "pais": "Estados Unidos",
       "latitud": 42.090944,
       "longitud": -71.264344,
-      "capacidad": 64146
+      "capacidad": 64146,
+      "anio_apertura": 2002,
+      "superficie": "Cesped artificial (natural para 2026)",
+      "techo": "Abierto",
+      "equipo_local": "New England Patriots / Revolution",
+      "descripcion": "Hogar de la dinastia de los Patriots de Tom Brady, con su iconico faro de 66 m en el acceso norte. Recibio partidos del Mundial 94 y de la Copa America Centenario."
     },
     {
       "nombre": "Lincoln Financial Field",
@@ -789,7 +864,12 @@
       "pais": "Estados Unidos",
       "latitud": 39.900833,
       "longitud": -75.1675,
-      "capacidad": 68324
+      "capacidad": 68324,
+      "anio_apertura": 2003,
+      "superficie": "Cesped hibrido",
+      "techo": "Abierto",
+      "equipo_local": "Philadelphia Eagles",
+      "descripcion": "Pionero en sustentabilidad: paneles solares y turbinas eolicas generan buena parte de su energia. La aficion de Philadelphia es reconocida como una de las mas intensas de la NFL."
     }
   ],
   "grupos": [

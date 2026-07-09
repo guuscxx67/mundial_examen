@@ -18,6 +18,12 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/css/flag-icons.min.css"
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap"
+    />
     <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body>
@@ -55,6 +61,9 @@
         </button>
         <button class="tab" data-view="simulador">
           <i class="fa-solid fa-gamepad"></i> Simulador
+        </button>
+        <button class="tab" data-view="resultados">
+          <i class="fa-solid fa-pen-to-square"></i> Resultados
         </button>
         <button class="tab" data-view="fasefinal">
           <i class="fa-solid fa-trophy"></i> Fase Final
@@ -94,6 +103,7 @@
             </div>
             <div class="sede-pill"><span class="fi fi-ca"></span> Canadá</div>
           </div>
+          <div class="countdown" id="countdown"></div>
         </div>
 
         <div class="cards" id="cards-inicio"></div>
@@ -305,6 +315,29 @@
         </div>
       </section>
 
+      <!-- ========================= 7b. RESULTADOS ======================== -->
+      <section class="view" id="view-resultados">
+        <h2><i class="fa-solid fa-pen-to-square"></i> Carga de resultados</h2>
+        <p class="hint">
+          Módulo del <b>administrador / usuario</b> para capturar o corregir los
+          marcadores de <b>todas las fases</b> del Mundial. Al modificar un
+          resultado de la <b>fase de grupos</b>, la tabla de posiciones se
+          recalcula y los <b>dieciseisavos de final se re-siembran
+          automáticamente</b>; en eliminatorias, el ganador avanza solo a la
+          siguiente ronda (los empates se definen por penales).
+        </p>
+        <div class="fase-chips" id="res-fases"></div>
+        <div class="panel">
+          <div class="panel-head">
+            <h3 id="res-titulo">Partidos</h3>
+            <button id="btn-simular-fase" class="btn-primary">
+              <i class="fa-solid fa-dice"></i> Simular ronda pendiente
+            </button>
+          </div>
+          <div id="lista-resultados"></div>
+        </div>
+      </section>
+
       <!-- ========================== 8. FASE FINAL ======================== -->
       <section class="view" id="view-fasefinal">
         <h2>Fase Final (eliminatorias)</h2>
@@ -328,8 +361,9 @@
       <section class="view" id="view-estadios">
         <h2>Ubicaciones de los estadios</h2>
         <p class="hint">
-          Haz clic en un estadio para ver equipos, fechas, horarios y costo de
-          boletos.
+          Los 16 estadios sede con su historia, características técnicas,
+          equipos que jugarán ahí, fechas, horarios, costo de boletos, ubicación
+          en Google Maps y opción de compartir en redes sociales.
         </p>
         <div id="estadios-grid" class="estadio-grid"></div>
       </section>
@@ -564,6 +598,12 @@
             <li>
               Fase de dieciseisavos generada automáticamente con sedes
               asignadas.
+            </li>
+            <li>
+              Módulo de <b>carga de resultados</b> por fase: modificar un
+              marcador de grupos re-siembra los dieciseisavos, y en
+              eliminatorias el ganador avanza automáticamente ronda a ronda
+              (con penales en caso de empate).
             </li>
             <li>
               Estadios con ubicación en Google Maps, equipos, fechas, horarios y

@@ -10,25 +10,38 @@ PostgreSQL o MongoDB**; este equipo implementa **PostgreSQL**.
 
 ---
 
-## 🧩 Módulos del frontend (13)
+## 🧩 Módulos del frontend (14)
 
 Una sola aplicación de página única (SPA) con estos módulos, según la especificación:
 
 | # | Módulo | Contenido |
 |---|--------|-----------|
-| 1 | **Inicio** | Logo, países sede, contador de partidos/equipos/estadios/goles, video introductorio, noticias |
+| 1 | **Inicio** | Logo, países sede, contadores animados, cuenta regresiva a la Final, video introductorio, noticias |
 | 2 | **Confederaciones** | Menú por confederación (UEFA, CONMEBOL, CONCACAF, CAF, AFC, OFC) y **ficha emergente** por selección (nombre, bandera, ranking, historia, ventajas, desventajas, entrenador, grupo y estadios con Google Maps) |
 | 3 | **Selecciones** | Ranking FIFA top 10 y listado completo con buscador |
 | 4 | **Grupos** | Tabla por grupo: Bandera · Selección · PJ · PG · PE · PP · GF · GC · DG · PT + partidos |
 | 5 | **Calendario** | Partidos agrupados por fecha, con filtros por fase y estado |
 | 6 | **Clasificación** | Posiciones de todos los grupos + clasificados a la fase final |
 | 7 | **Simulador** | Registrar/simular resultados (el trigger recalcula la tabla) y generar la fase final |
-| 8 | **Fase Final** | Cuadro de eliminatorias (32 equipos) con sedes, fechas, horarios y costo |
-| 9 | **Estadios** | Nombre, ubicación en Google Maps, equipos, fechas, horarios y costo de boletos |
-| 10 | **Geolocalización** | Mapa interactivo (Leaflet) con estadios y capitales, ruta y compartir |
-| 11 | **Boletos** | Compra de boletos y usuarios |
-| 12 | **Administrador** | Altas y gestión (CRUD) de selecciones, estadios, grupos y partidos |
-| 13 | **Acerca del Proyecto** | Descripción, stack, módulos y requisitos cubiertos |
+| 8 | **Resultados** | **Carga de resultados de TODAS las fases** (usuario/administrador): modificar un marcador de grupos **re-siembra los dieciseisavos** automáticamente; en eliminatorias el **ganador avanza solo** a la siguiente ronda (empates definidos por penales) |
+| 9 | **Fase Final** | Cuadro de eliminatorias (32 equipos) con sedes, fechas, horarios y costo |
+| 10 | **Estadios** | Historia, año de apertura, superficie, techo, equipo local, capacidad, equipos que jugarán, fechas, horarios, costo de boletos por fase, Google Maps y compartir |
+| 11 | **Geolocalización** | Mapa interactivo (Leaflet) con estadios y capitales, ruta y compartir |
+| 12 | **Boletos** | Compra de boletos y usuarios |
+| 13 | **Administrador** | Altas y gestión (CRUD) de selecciones, estadios, grupos y partidos |
+| 14 | **Acerca del Proyecto** | Descripción, stack, módulos y requisitos cubiertos |
+
+### 🔁 Flujo de resultados (grupos → dieciseisavos → ... → final)
+
+1. La fase de grupos viene **precargada** con los 72 resultados y, al arrancar el
+   servidor, el cuadro de fase final se **genera automáticamente** si no existe.
+2. En el módulo **Resultados**, el administrador puede corregir cualquier marcador
+   de grupos: el *trigger* recalcula la tabla de posiciones y el backend
+   **re-siembra las llaves de dieciseisavos afectadas** (las llaves cuyo cruce
+   cambia pierden su resultado; las demás lo conservan).
+3. En eliminatorias, al capturar un marcador el **ganador se propaga** a la
+   siguiente ronda (D→O→C→S→F); los perdedores de semifinal van al Tercer Lugar.
+   Un empate exige **definición por penales**.
 
 ---
 
@@ -105,9 +118,10 @@ npm start
 Abrir **http://localhost:3000** en el navegador.
 
 > ♻️ **Si ya habías levantado la base de datos antes**, ejecuta `npm run db:reset`
-> para recrear el volumen y aplicar el esquema actualizado (se añadió la columna
-> `entrenador` a `selecciones`). Los scripts de inicialización de Docker solo se
-> ejecutan la **primera** vez que se crea el volumen.
+> para recrear el volumen y aplicar el esquema actualizado (se añadieron las
+> columnas `descripcion`, `anio_apertura`, `superficie`, `techo` y `equipo_local`
+> a `estadios`). Los scripts de inicialización de Docker solo se ejecutan la
+> **primera** vez que se crea el volumen.
 
 > ⚠️ **Nota sobre el puerto:** la base de datos del contenedor se publica en el puerto
 > **55432** del host (para no chocar con instalaciones nativas de PostgreSQL que suelen
@@ -122,6 +136,7 @@ Abrir **http://localhost:3000** en el navegador.
 | `npm run db:up` | Levanta el contenedor de PostgreSQL |
 | `npm run db:reset` | Reinicia la BD desde cero (borra y recarga datos) |
 | `node scripts/generar-seed.mjs` | Regenera `db/seed.sql` desde `db/dataset.json` |
+| `node scripts/generar-instalar.mjs` | Regenera `db/instalar.sql` (schema + seed + cuadro de fase final) |
 
 ### Ejecutar las consultas del examen
 
@@ -142,10 +157,13 @@ docker exec -i mundial2026_db psql -U mundial -d mundial2026 < db/queries.sql
 | GET | `/api/continentes/paises` | Países por confederación |
 | GET | `/api/grupos/:id/clasificacion` | Tabla de posiciones de un grupo |
 | POST | `/api/grupos/:id/asignar` | Asignar selección a un grupo |
-| GET/POST | `/api/estadios` | CRUD de estadios |
+| GET/POST | `/api/estadios` | CRUD de estadios (con historia, año, superficie, techo y equipo local) |
+| GET | `/api/estadios/:id/partidos` | Partidos del estadio (grupos **y** eliminatorias) |
 | GET/POST | `/api/partidos` | CRUD de partidos |
-| PUT | `/api/partidos/:id/resultado` | Registrar resultado (recalcula clasificación) |
+| PUT | `/api/partidos/:id/resultado` | Registrar resultado (recalcula clasificación y **re-siembra dieciseisavos**) |
 | POST | `/api/fase-final/generar` | Genera el cuadro con **sedes automáticas** |
+| PUT | `/api/fase-final/:id/resultado` | Resultado de una llave (con penales) → **propaga al ganador** |
+| POST | `/api/fase-final/simular` | Simula la primera ronda pendiente de eliminatorias |
 | GET | `/api/estadisticas/*` | Estadísticas del torneo |
 | GET | `/api/compartir/{grupo\|clasificacion\|estadio\|ruta}` | Enlaces para redes sociales |
 

@@ -173,9 +173,9 @@ for (const g of grupos) {
 }
 L.push('');
 
-L.push('-- 4) ESTADIOS (con geolocalizacion)');
+L.push('-- 4) ESTADIOS (con geolocalizacion e informacion ampliada)');
 for (const e of estadios) {
-  L.push(`INSERT INTO estadios (id, nombre, ciudad, pais, latitud, longitud, capacidad) VALUES (${e.id}, ${q(e.nombre)}, ${q(e.ciudad)}, ${q(e.pais)}, ${num(e.latitud)}, ${num(e.longitud)}, ${num(e.capacidad)});`);
+  L.push(`INSERT INTO estadios (id, nombre, ciudad, pais, latitud, longitud, capacidad, descripcion, anio_apertura, superficie, techo, equipo_local) VALUES (${e.id}, ${q(e.nombre)}, ${q(e.ciudad)}, ${q(e.pais)}, ${num(e.latitud)}, ${num(e.longitud)}, ${num(e.capacidad)}, ${q(e.descripcion)}, ${num(e.anio_apertura)}, ${q(e.superficie)}, ${q(e.techo)}, ${q(e.equipo_local)});`);
 }
 L.push('');
 

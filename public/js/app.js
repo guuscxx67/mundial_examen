@@ -22,8 +22,9 @@ const CONFEDS = [
 
 const MODULOS = [
   'Inicio', 'Confederaciones', 'Selecciones', 'Grupos', 'Calendario',
-  'Clasificación', 'Simulador', 'Fase Final', 'Estadios', 'Geolocalización',
-  'Boletos', 'Administrador', 'Acerca del Proyecto',
+  'Clasificación', 'Simulador', 'Resultados (carga por fase)', 'Fase Final',
+  'Estadios', 'Geolocalización', 'Boletos', 'Administrador',
+  'Acerca del Proyecto',
 ];
 
 // ---- Utilidades ----
@@ -108,8 +109,9 @@ function cargarVista(view) {
   const fn = {
     inicio: cargarInicio, confederaciones: cargarConfederaciones, selecciones: cargarSelecciones,
     grupos: cargarGrupos, calendario: cargarCalendario, clasificacion: cargarClasificacion,
-    simulador: cargarSimulador, fasefinal: cargarFaseFinal, estadios: cargarEstadios,
-    geo: cargarGeo, boletos: cargarBoletos, admin: cargarAdmin, acerca: cargarAcerca,
+    simulador: cargarSimulador, resultados: cargarResultados, fasefinal: cargarFaseFinal,
+    estadios: cargarEstadios, geo: cargarGeo, boletos: cargarBoletos, admin: cargarAdmin,
+    acerca: cargarAcerca,
   }[view];
   if (fn) fn().catch((e) => toast(e.message, true));
 }
@@ -157,6 +159,39 @@ async function cargarInicio() {
   $('#inicio-equipos').innerHTML = [...sels]
     .sort((a, b) => (a.ranking || 999) - (b.ranking || 999))
     .map((s) => `<span class="chip">${bandera(s.bandera)} ${esc(s.nombre)}</span>`).join('');
+
+  iniciarCountdown();
+}
+
+// Cuenta regresiva a la Gran Final (19 de julio de 2026, MetLife Stadium)
+let _cdTimer = null;
+function iniciarCountdown() {
+  const objetivo = new Date('2026-07-19T13:00:00-05:00');
+  const pinta = () => {
+    const el = $('#countdown');
+    if (!el) return;
+    const diff = objetivo - Date.now();
+    if (diff <= 0) {
+      el.innerHTML = `<div class="cd-titulo">${ic('fa-trophy')} ¡La Gran Final ya se jugó!</div>`;
+      clearInterval(_cdTimer);
+      return;
+    }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor(diff / 3600000) % 24;
+    const m = Math.floor(diff / 60000) % 60;
+    const s = Math.floor(diff / 1000) % 60;
+    el.innerHTML = `
+      <div class="cd-titulo">${ic('fa-trophy')} Cuenta regresiva a la Gran Final · MetLife Stadium</div>
+      <div class="cd-nums">
+        <div class="cd-box"><b>${d}</b><span>días</span></div>
+        <div class="cd-box"><b>${String(h).padStart(2, '0')}</b><span>horas</span></div>
+        <div class="cd-box"><b>${String(m).padStart(2, '0')}</b><span>min</span></div>
+        <div class="cd-box"><b>${String(s).padStart(2, '0')}</b><span>seg</span></div>
+      </div>`;
+  };
+  clearInterval(_cdTimer);
+  pinta();
+  _cdTimer = setInterval(pinta, 1000);
 }
 
 function animarContadores() {
@@ -456,6 +491,137 @@ $('#btn-simular-todo').addEventListener('click', async () => {
 $('#btn-generar-fasefinal-sim').addEventListener('click', generarFaseFinal);
 
 // ============================================================================
+//  7b) RESULTADOS  (carga de marcadores de TODAS las fases del Mundial)
+//  - Grupos: al guardar, el trigger recalcula la clasificacion y el backend
+//    re-siembra los dieciseisavos si el cuadro ya existe.
+//  - Eliminatorias: el ganador avanza automaticamente a la siguiente ronda;
+//    los empates se definen por penales.
+// ============================================================================
+const FASES_TODAS = ['Grupos', 'Dieciseisavos', 'Octavos', 'Cuartos', 'Semifinal', 'Tercer Lugar', 'Final'];
+Estado.faseResultados = 'Grupos';
+
+async function cargarResultados() {
+  const partidos = await partidosDetalle(true);
+  const cuadro = await API.get('/fase-final');
+
+  const deFase = (f) => f === 'Grupos'
+    ? partidos.filter((p) => p.fase === 'Grupos')
+    : cuadro.filter((x) => x.nombre_fase === f);
+
+  $('#res-fases').innerHTML = FASES_TODAS.map((f) => {
+    const lista = deFase(f);
+    const jugados = lista.filter((x) => x.jugado).length;
+    return `<button class="fase-chip ${f === Estado.faseResultados ? 'active' : ''}" data-fase="${f}">
+      <span>${f}</span><small>${jugados}/${lista.length} jugados</small></button>`;
+  }).join('');
+  $$('#res-fases .fase-chip').forEach((b) =>
+    b.addEventListener('click', () => { Estado.faseResultados = b.dataset.fase; cargarResultados(); }));
+
+  const f = Estado.faseResultados;
+  $('#res-titulo').textContent = f === 'Grupos' ? 'Partidos de la fase de grupos' : `Llaves de ${f}`;
+  const lista = deFase(f);
+
+  if (!lista.length) {
+    $('#lista-resultados').innerHTML = `<p class="hint">Aún no hay partidos en esta fase. ${f !== 'Grupos' ? 'Genera el cuadro de fase final desde el Simulador.' : ''}</p>`;
+    return;
+  }
+
+  $('#lista-resultados').innerHTML = lista.map((p) => f === 'Grupos' ? filaResGrupo(p) : filaResLlave(p)).join('');
+  $$('#lista-resultados .form-res').forEach((form) =>
+    form.addEventListener('submit', guardarResultadoFila));
+}
+
+function filaResGrupo(p) {
+  return `<form class="fila-res form-res" data-tipo="grupo" data-id="${p.id}">
+    <div class="fr-info">
+      <span class="fr-fase">Grupo ${p.grupo} · ${fechaLarga(p.fecha)}</span>
+      <span class="fr-sede">${ic('fa-location-dot')} ${esc(p.estadio || 'Por definir')}</span>
+    </div>
+    <div class="fr-equipos">
+      <span class="fr-eq local">${esc(p.local)} ${bandera(p.bandera_local)}</span>
+      <input name="goles_local" type="number" min="0" required value="${p.jugado ? p.goles_local : ''}" placeholder="-">
+      <span class="fr-guion">–</span>
+      <input name="goles_visitante" type="number" min="0" required value="${p.jugado ? p.goles_visitante : ''}" placeholder="-">
+      <span class="fr-eq">${bandera(p.bandera_visitante)} ${esc(p.visitante)}</span>
+    </div>
+    <button type="submit">${p.jugado ? ic('fa-rotate') + ' Corregir' : ic('fa-check') + ' Guardar'}</button>
+  </form>`;
+}
+
+function filaResLlave(x) {
+  const sinEquipos = !x.local || !x.visitante;
+  const empate = x.jugado && x.goles_local === x.goles_visitante;
+  return `<form class="fila-res form-res ${sinEquipos ? 'fr-bloqueada' : ''}" data-tipo="llave" data-id="${x.id}">
+    <div class="fr-info">
+      <span class="fr-fase">${x.nombre_fase} · Llave ${x.llave} · ${fechaLarga(x.fecha)}</span>
+      <span class="fr-sede">${ic('fa-location-dot')} ${esc(x.estadio || 'Por definir')}${x.ciudad ? ' (' + esc(x.ciudad) + ')' : ''}</span>
+    </div>
+    <div class="fr-equipos">
+      <span class="fr-eq local">${esc(x.local || 'Por definir')} ${bandera(x.bandera_local)}</span>
+      <input name="goles_local" type="number" min="0" required ${sinEquipos ? 'disabled' : ''} value="${x.jugado ? x.goles_local : ''}" placeholder="-">
+      <span class="fr-guion">–</span>
+      <input name="goles_visitante" type="number" min="0" required ${sinEquipos ? 'disabled' : ''} value="${x.jugado ? x.goles_visitante : ''}" placeholder="-">
+      <span class="fr-eq">${bandera(x.bandera_visitante)} ${esc(x.visitante || 'Por definir')}</span>
+    </div>
+    <div class="fr-penales" title="Solo si el partido termina empatado">
+      ${ic('fa-bullseye')} Penales:
+      <input name="penales_local" type="number" min="0" ${sinEquipos ? 'disabled' : ''} value="${empate && x.penales_local != null ? x.penales_local : ''}" placeholder="L">
+      <input name="penales_visitante" type="number" min="0" ${sinEquipos ? 'disabled' : ''} value="${empate && x.penales_visitante != null ? x.penales_visitante : ''}" placeholder="V">
+    </div>
+    <button type="submit" ${sinEquipos ? 'disabled' : ''}>${sinEquipos ? ic('fa-lock') + ' Ronda previa' : (x.jugado ? ic('fa-rotate') + ' Corregir' : ic('fa-check') + ' Guardar')}</button>
+  </form>`;
+}
+
+async function guardarResultadoFila(e) {
+  e.preventDefault();
+  const form = e.target;
+  const d = formData(form);
+  try {
+    if (form.dataset.tipo === 'grupo') {
+      const r = await API.put(`/partidos/${form.dataset.id}/resultado`, {
+        goles_local: d.goles_local, goles_visitante: d.goles_visitante,
+      });
+      const sync = r.fase_final;
+      const nDs = sync?.llaves_dieciseisavos?.length || 0;
+      toast(nDs
+        ? `Resultado guardado: clasificación recalculada y ${nDs} llave(s) de dieciseisavos re-sembradas`
+        : 'Resultado guardado: clasificación recalculada (los dieciseisavos no cambiaron)');
+    } else {
+      const r = await API.put(`/fase-final/${form.dataset.id}/resultado`, {
+        goles_local: d.goles_local, goles_visitante: d.goles_visitante,
+        penales_local: d.penales_local, penales_visitante: d.penales_visitante,
+      });
+      const n = r.llaves_actualizadas?.length || 0;
+      toast(`Resultado de ${r.nombre_fase} guardado${n ? ` · ${n} llave(s) siguiente(s) actualizada(s)` : ''}`);
+    }
+    invalidarCache();
+    cargarResultados();
+  } catch (err) { toast(err.message, true); }
+}
+
+$('#btn-simular-fase').addEventListener('click', async () => {
+  try {
+    if (Estado.faseResultados === 'Grupos') {
+      const partidos = (await partidosDetalle(true)).filter((p) => !p.jugado && p.fase === 'Grupos');
+      if (!partidos.length) return toast('La fase de grupos ya está completa');
+      for (const p of partidos) {
+        await API.put(`/partidos/${p.id}/resultado`, {
+          goles_local: Math.floor(Math.random() * 5),
+          goles_visitante: Math.floor(Math.random() * 5),
+        });
+      }
+      toast(`Simulados ${partidos.length} partidos de grupos`);
+    } else {
+      const r = await API.post('/fase-final/simular');
+      toast(`Simulada la ronda de ${r.fase} (${r.simulados} partidos)`);
+      Estado.faseResultados = r.fase;
+    }
+    invalidarCache();
+    cargarResultados();
+  } catch (err) { toast(err.message, true); }
+});
+
+// ============================================================================
 //  8) FASE FINAL
 // ============================================================================
 const ORDEN_FASES = ['Dieciseisavos', 'Octavos', 'Cuartos', 'Semifinal', 'Tercer Lugar', 'Final'];
@@ -509,27 +675,68 @@ $('#btn-generar-fasefinal').addEventListener('click', generarFaseFinal);
 // ============================================================================
 //  9) ESTADIOS
 // ============================================================================
+const PAIS_ISO = { 'Mexico': 'mx', 'México': 'mx', 'Estados Unidos': 'us', 'Canada': 'ca', 'Canadá': 'ca' };
+const PAIS_GRAD = {
+  mx: 'linear-gradient(135deg,#00512a,#00833f 55%,#0aa04f)',
+  us: 'linear-gradient(135deg,#001a4d,#002868 55%,#20458f)',
+  ca: 'linear-gradient(135deg,#7a0f08,#d52b1e 55%,#e8564a)',
+};
+
 async function cargarEstadios() {
   const estadios = await cargarEstadiosLista(true);
   const cards = await Promise.all(estadios.map(async (e) => {
     const partidos = await API.get(`/estadios/${e.id}/partidos`);
+    const compartir = await API.get(`/compartir/estadio/${e.id}`).catch(() => null);
     const gmaps = `https://www.google.com/maps/search/?api=1&query=${e.latitud},${e.longitud}`;
-    const equipos = [...new Set(partidos.flatMap((p) => [p.local, p.visitante]))];
+    const iso = PAIS_ISO[e.pais] || 'us';
+
+    const equipos = [...new Map(
+      partidos.filter((p) => p.local !== 'Por definir' || p.visitante !== 'Por definir')
+        .flatMap((p) => [[p.local, p.bandera_local], [p.visitante, p.bandera_visitante]])
+        .filter(([n]) => n && n !== 'Por definir'),
+    ).entries()];
+
+    const fases = [...new Set(partidos.map((p) => p.fase))];
+    const costosHtml = fases.map((f) =>
+      `<span class="chip-costo">${f}: <b>${money(precioPorFase(f))}</b></span>`).join('');
+
     const partidosHtml = partidos.length
-      ? partidos.map((p) => `<div class="partido-mini">${bandera(p.bandera_local)} ${esc(p.local)} ` +
-          `${p.jugado ? `<b>${p.goles_local}-${p.goles_visitante}</b>` : 'vs'} ${bandera(p.bandera_visitante)} ${esc(p.visitante)} ` +
-          `· ${soloFecha(p.fecha)} ${String(p.horario || '').slice(0, 5)} · ${p.fase}</div>`).join('')
+      ? partidos.map((p) => `<div class="partido-mini">
+          <span class="pm-fase">${p.fase}</span>
+          ${bandera(p.bandera_local)} ${esc(p.local)}
+          ${p.jugado ? `<b>${p.goles_local}-${p.goles_visitante}</b>` : 'vs'}
+          ${bandera(p.bandera_visitante)} ${esc(p.visitante)}
+          · ${ic('fa-calendar-days')} ${soloFecha(p.fecha)} ${ic('fa-clock')} ${String(p.horario || '').slice(0, 5)}
+          · ${ic('fa-ticket')} ${money(precioPorFase(p.fase))}</div>`).join('')
       : '<p class="hint">Sin partidos programados.</p>';
+
     return `<div class="estadio-card">
-      <div class="cab"><div class="nom">${ic('fa-location-dot')} ${esc(e.nombre)}</div><div class="ciu">${esc(e.ciudad)}, ${esc(e.pais)}</div></div>
+      <div class="cab" style="background:${PAIS_GRAD[iso]}">
+        <span class="cab-flag fi fi-${iso}"></span>
+        <div class="cab-ic">${ic('fa-landmark-flag')}</div>
+        <div class="nom">${esc(e.nombre)}</div>
+        <div class="ciu">${ic('fa-city')} ${esc(e.ciudad)}, ${esc(e.pais)}</div>
+        <div class="cab-badges">
+          <span class="badge-cap">${ic('fa-users')} ${Number(e.capacidad).toLocaleString('es-MX')}</span>
+          ${e.anio_apertura ? `<span class="badge-cap">${ic('fa-calendar')} ${e.anio_apertura}</span>` : ''}
+          <span class="badge-cap">${ic('fa-futbol')} ${partidos.length} partidos</span>
+        </div>
+      </div>
       <div class="cuerpo">
-        <div class="dato"><span class="k">Capacidad</span><span>${Number(e.capacidad).toLocaleString('es-MX')}</span></div>
-        <div class="dato"><span class="k">Ubicación</span><span>${e.latitud}, ${e.longitud}</span></div>
-        <div class="dato"><span class="k">Partidos</span><span>${partidos.length}</span></div>
-        <div class="dato"><span class="k">Equipos</span><span>${equipos.length}</span></div>
-        <div class="dato"><span class="k">Costo boletos</span><span>desde ${money(precioPorFase('Grupos'))}</span></div>
-        <div class="share" style="margin-top:.5rem"><a class="gm" href="${gmaps}" target="_blank">${ic('fa-map-location-dot')} Ver en Google Maps</a></div>
-        <details><summary>Ver partidos, fechas y horarios (${partidos.length})</summary>${partidosHtml}</details>
+        ${e.descripcion ? `<p class="est-desc">${esc(e.descripcion)}</p>` : ''}
+        <div class="dato"><span class="k">${ic('fa-seedling')} Superficie</span><span>${esc(e.superficie || '-')}</span></div>
+        <div class="dato"><span class="k">${ic('fa-umbrella')} Techo</span><span>${esc(e.techo || '-')}</span></div>
+        <div class="dato"><span class="k">${ic('fa-shield-halved')} Equipo local</span><span>${esc(e.equipo_local || '-')}</span></div>
+        <div class="dato"><span class="k">${ic('fa-map-pin')} Coordenadas</span><span>${e.latitud}, ${e.longitud}</span></div>
+        <div class="dato"><span class="k">${ic('fa-layer-group')} Fases</span><span>${fases.join(' · ') || '-'}</span></div>
+        <div class="est-costos"><span class="k">${ic('fa-ticket')} Boletos:</span> ${costosHtml || '-'}</div>
+        ${equipos.length ? `<div class="est-equipos">${equipos.map(([n, b]) =>
+          `<span class="chip">${bandera(b)} ${esc(n)}</span>`).join('')}</div>` : ''}
+        <div class="share" style="margin-top:.6rem">
+          <a class="gm" href="${gmaps}" target="_blank">${ic('fa-map-location-dot')} Google Maps</a>
+          ${compartir ? linksCompartir(compartir.enlaces) : ''}
+        </div>
+        <details><summary>${ic('fa-calendar-days')} Ver los ${partidos.length} partidos (equipos, fechas, horarios y costos)</summary>${partidosHtml}</details>
       </div>
     </div>`;
   }));

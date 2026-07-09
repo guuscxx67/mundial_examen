@@ -68,7 +68,11 @@ api.put('/partidos/:id/resultado', wrap(async (req, res) => {
   const { goles_local, goles_visitante } = req.body;
   const p = await Partido.registrarResultado(req.params.id, goles_local, goles_visitante);
   if (!p) return res.status(404).json({ error: 'Partido no encontrado' });
-  res.json(p);
+  // Si el cuadro de fase final ya existe, un cambio en grupos re-siembra los
+  // dieciseisavos (y la cascada de rondas siguientes) automaticamente.
+  let sync = null;
+  if (p.fase === 'Grupos') sync = await FaseFinalService.sincronizarDieciseisavos();
+  res.json({ ...p, fase_final: sync });
 }));
 api.use('/partidos', crudRouter(Partido));
 
@@ -82,6 +86,14 @@ api.get('/clasificaciones/clasificados', wrap(async (req, res) => res.json(await
 //  FASE FINAL  (asignacion automatica de sedes)
 // --------------------------------------------------------------------------
 api.post('/fase-final/generar', wrap(async (req, res) => res.json(await FaseFinalService.generar())));
+api.post('/fase-final/simular', wrap(async (req, res) => res.json(await FaseFinalService.simularRondaPendiente())));
+api.put('/fase-final/:id/resultado', wrap(async (req, res) => {
+  const { goles_local, goles_visitante, penales_local, penales_visitante } = req.body;
+  const r = await FaseFinalService.registrarResultado(
+    req.params.id, goles_local, goles_visitante, penales_local, penales_visitante);
+  if (!r) return res.status(404).json({ error: 'Llave no encontrada' });
+  res.json(r);
+}));
 api.get('/fase-final', wrap(async (req, res) => res.json(await FaseFinal.cuadro())));
 
 // --------------------------------------------------------------------------

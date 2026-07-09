@@ -10,6 +10,7 @@ import { fileURLToPath } from 'node:url';
 
 import api from './routes/index.js';
 import { pool } from './db/pool.js';
+import FaseFinalService from './services/FaseFinalService.js';
 
 dotenv.config();
 
@@ -42,7 +43,23 @@ app.use((err, req, res, next) => {
   res.status(400).json({ error: err.message });
 });
 
+// Si la fase de grupos ya esta completa y el cuadro de eliminatorias no
+// existe, se genera solo: asi la liga grupos -> dieciseisavos es visible
+// desde el primer arranque.
+async function asegurarFaseFinal() {
+  try {
+    const { rows } = await pool.query('SELECT COUNT(*) AS n FROM fase_final');
+    if (Number(rows[0].n) === 0) {
+      const r = await FaseFinalService.generar();
+      console.log(`  Fase final generada automaticamente (${r.clasificados} clasificados).`);
+    }
+  } catch (e) {
+    console.log(`  Fase final no generada aun: ${e.message}`);
+  }
+}
+
 app.listen(PORT, () => {
   console.log(`\n  Mundial FIFA 2026  ->  http://localhost:${PORT}`);
   console.log(`  API REST           ->  http://localhost:${PORT}/api/health\n`);
+  asegurarFaseFinal();
 });

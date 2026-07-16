@@ -908,5 +908,57 @@ async function cargarAcerca() {
   $('#lista-modulos').innerHTML = MODULOS.map((m) => `<li>${m}</li>`).join('');
 }
 
+// ============================================================================
+//  TIEMPO REAL (multi-equipo): un equipo funciona como servidor y los demas
+//  abren la app desde su IP. Cada modificacion de cualquier cliente llega por
+//  SSE y la vista activa se actualiza sola, sin recargar la pagina.
+// ============================================================================
+const NOMBRE_EVENTO = {
+  'resultado-grupos': 'Otro equipo actualizó un resultado de la fase de grupos',
+  'resultado-fase-final': 'Otro equipo capturó una llave de la fase final',
+  'fase-final-generada': 'Otro equipo regeneró el cuadro de la fase final',
+  'fase-final-simulada': 'Otro equipo simuló una ronda de la fase final',
+  crud: 'Otro equipo modificó los datos del torneo',
+};
+let _recargaPendiente = false;
+
+function recargarVistaActiva() {
+  const view = document.querySelector('.tab.active')?.dataset.view;
+  if (view) cargarVista(view);
+}
+
+function iniciarTiempoReal() {
+  const ind = $('#rt-indicador');
+  const es = new EventSource('/api/eventos');
+  es.onopen = () => { ind.className = 'rt on'; ind.innerHTML = `${ic('fa-tower-broadcast')} En vivo`; };
+  es.onerror = () => { ind.className = 'rt off'; ind.innerHTML = `${ic('fa-tower-broadcast')} Reconectando…`; };
+  es.onmessage = (e) => {
+    let ev;
+    try { ev = JSON.parse(e.data); } catch { return; }
+    if (ev.tipo === 'conectado') return;
+    if (ev.origen === CLIENTE_ID) return; // cambio hecho desde este mismo navegador
+
+    invalidarCache();
+    Estado.grupos = []; Estado.continentes = []; Estado.usuarios = [];
+    const msg = NOMBRE_EVENTO[ev.tipo] || 'Datos actualizados por otro equipo';
+
+    // Si el usuario esta escribiendo, no le borramos lo capturado: la vista
+    // se actualiza en cuanto suelte el campo.
+    const activo = document.activeElement;
+    const escribiendo = activo && ['INPUT', 'SELECT', 'TEXTAREA'].includes(activo.tagName) && activo.closest('main');
+    if (escribiendo) {
+      toast(`⚡ ${msg} — la vista se actualizará al soltar el campo`);
+      if (!_recargaPendiente) {
+        _recargaPendiente = true;
+        activo.addEventListener('blur', () => { _recargaPendiente = false; recargarVistaActiva(); }, { once: true });
+      }
+      return;
+    }
+    toast(`⚡ ${msg}`);
+    recargarVistaActiva();
+  };
+}
+
 // ---- Arranque ----
 cargarInicio().catch((e) => toast(e.message, true));
+iniciarTiempoReal();

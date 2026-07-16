@@ -5,6 +5,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -58,8 +59,18 @@ async function asegurarFaseFinal() {
   }
 }
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`\n  Mundial FIFA 2026  ->  http://localhost:${PORT}`);
-  console.log(`  API REST           ->  http://localhost:${PORT}/api/health\n`);
+  console.log(`  API REST           ->  http://localhost:${PORT}/api/health`);
+  // Direcciones para los demas equipos (este equipo actua como SERVIDOR):
+  const ips = Object.values(os.networkInterfaces()).flat()
+    .filter((i) => i && i.family === 'IPv4' && !i.internal)
+    .map((i) => i.address);
+  if (ips.length) {
+    console.log(`  En red local       ->  ${ips.map((ip) => `http://${ip}:${PORT}`).join('   ')}`);
+    console.log('  Los demas equipos abren esa direccion: veran las modificaciones en tiempo real.\n');
+  } else {
+    console.log('');
+  }
   asegurarFaseFinal();
 });

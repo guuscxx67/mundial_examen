@@ -1,10 +1,13 @@
 // ============================================================================
-//  Generador de db/instalar.sql (instalador completo para pgAdmin):
-//  schema.sql + seed.sql + el cuadro de fase final tomado de la base de datos
-//  en ejecucion (docker: mundial2026_db).
+//  Generador de db/instalar.sql (instalador completo para pgAdmin) y de
+//  db/seed-fasefinal.sql (que Docker carga como 03-fasefinal.sql al crear el
+//  volumen): ambos toman el cuadro de fase final tal como esta en la base de
+//  datos en ejecucion (docker: mundial2026_db), es decir, con los resultados
+//  cargados hasta Semifinales.
 //
 //  Uso:  node scripts/generar-instalar.mjs
-//  Requiere: contenedor de PostgreSQL arriba y cuadro de fase final generado.
+//  Requiere: contenedor de PostgreSQL arriba y cuadro de fase final generado
+//  (normalmente tras ejecutar scripts/jugar-hasta-semifinales.mjs).
 // ============================================================================
 import fs from 'node:fs';
 import path from 'node:path';
@@ -68,3 +71,18 @@ L.push('');
 
 fs.writeFileSync(path.join(root, 'db', 'instalar.sql'), L.join('\n'));
 console.log(`instalar.sql generado (${ff.length} llaves de fase final incluidas).`);
+
+// 3) seed-fasefinal.sql: Docker lo carga como 03-fasefinal.sql en el primer
+//    arranque del volumen, despues de schema.sql y seed.sql.
+const L2 = [];
+L2.push('-- FASE FINAL precargada: dieciseisavos, octavos, cuartos y semifinal jugados;');
+L2.push('-- tercer lugar y final con equipos definidos, pendientes de capturar.');
+L2.push('-- GENERADO por scripts/generar-instalar.mjs (no editar a mano).');
+L2.push("SET client_encoding = 'UTF8';");
+L2.push('BEGIN;');
+L2.push(...ff);
+L2.push("SELECT setval('fase_final_id_seq', (SELECT COALESCE(MAX(id),1) FROM fase_final));");
+L2.push('COMMIT;');
+L2.push('');
+fs.writeFileSync(path.join(root, 'db', 'seed-fasefinal.sql'), L2.join('\n'));
+console.log('seed-fasefinal.sql generado (se carga automaticamente con docker compose).');

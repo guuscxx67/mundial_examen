@@ -33,8 +33,10 @@ Una sola aplicación de página única (SPA) con estos módulos, según la espec
 
 ### 🔁 Flujo de resultados (grupos → dieciseisavos → ... → final)
 
-1. La fase de grupos viene **precargada** con los 72 resultados y, al arrancar el
-   servidor, el cuadro de fase final se **genera automáticamente** si no existe.
+1. La fase de grupos viene **precargada** con los 72 resultados y el cuadro de
+   fase final viene **jugado hasta Semifinales** (`db/seed-fasefinal.sql`): el
+   **Tercer Lugar y la Final** quedan con sus equipos definidos, **pendientes de
+   capturar**. (Si el cuadro no existiera, el servidor lo genera solo al arrancar.)
 2. En el módulo **Resultados**, el administrador puede corregir cualquier marcador
    de grupos: el *trigger* recalcula la tabla de posiciones y el backend
    **re-siembra las llaves de dieciseisavos afectadas** (las llaves cuyo cruce
@@ -42,6 +44,31 @@ Una sola aplicación de página única (SPA) con estos módulos, según la espec
 3. En eliminatorias, al capturar un marcador el **ganador se propaga** a la
    siguiente ronda (D→O→C→S→F); los perdedores de semifinal van al Tercer Lugar.
    Un empate exige **definición por penales**.
+
+---
+
+## 🌐 Trabajo en red y TIEMPO REAL (un equipo como servidor)
+
+El sistema está preparado para que **un equipo funcione como servidor** y los
+demás equipos trabajen contra él **viendo las modificaciones en tiempo real**:
+
+1. **Equipo servidor:** levanta la BD y el servidor (`docker compose up -d` +
+   `npm start`). La consola muestra las direcciones de red local, por ejemplo
+   `http://192.168.1.50:3000`.
+2. **Los demás equipos:** solo abren esa dirección en su navegador — no
+   necesitan instalar nada.
+3. **Tiempo real:** cada navegador se suscribe a `GET /api/eventos`
+   (**Server-Sent Events**). Cualquier modificación (resultados de grupos o de
+   fase final, altas, boletos, regeneración del cuadro) se **difunde a todos
+   los clientes conectados**, que actualizan su vista automáticamente y
+   muestran una notificación — sin recargar la página. El indicador **“En
+   vivo”** de la barra superior muestra el estado de la conexión.
+4. Cada navegador manda un identificador (`X-Cliente`) en sus peticiones para
+   ignorar sus propios eventos y no recargarse dos veces.
+
+> 🔥 Si los demás equipos no pueden conectarse, en el equipo servidor hay que
+> permitir **Node.js** en el Firewall de Windows (o el puerto 3000, TCP,
+> redes privadas).
 
 ---
 
@@ -136,7 +163,9 @@ Abrir **http://localhost:3000** en el navegador.
 | `npm run db:up` | Levanta el contenedor de PostgreSQL |
 | `npm run db:reset` | Reinicia la BD desde cero (borra y recarga datos) |
 | `node scripts/generar-seed.mjs` | Regenera `db/seed.sql` desde `db/dataset.json` |
-| `node scripts/generar-instalar.mjs` | Regenera `db/instalar.sql` (schema + seed + cuadro de fase final) |
+| `node scripts/jugar-hasta-semifinales.mjs` | Regenera el cuadro y lo juega (determinista) hasta Semifinales |
+| `node scripts/generar-instalar.mjs` | Regenera `db/instalar.sql` y `db/seed-fasefinal.sql` desde la BD viva |
+| `npm run entrega:estado` | Los dos anteriores en cadena: deja el estado de entrega y sus SQL |
 
 ### Ejecutar las consultas del examen
 

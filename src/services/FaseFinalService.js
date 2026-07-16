@@ -49,8 +49,8 @@ export default class FaseFinalService {
     const { rows } = await pool.query(`
       SELECT c.id_grupo, g.nombre AS grupo, s.id AS id_seleccion,
              s.nombre, s.bandera, c.pts, c.dg, c.gf,
-             RANK() OVER (PARTITION BY c.id_grupo
-                          ORDER BY c.pts DESC, c.dg DESC, c.gf DESC) AS posicion
+             ROW_NUMBER() OVER (PARTITION BY c.id_grupo
+                                ORDER BY c.pts DESC, c.dg DESC, c.gf DESC, s.nombre ASC) AS posicion
         FROM clasificaciones c
         JOIN grupos g      ON g.id = c.id_grupo
         JOIN selecciones s ON s.id = c.id_seleccion

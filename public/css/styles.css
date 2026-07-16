@@ -83,6 +83,17 @@ h1, h2, h3, h4, .num, .marcador, .cd-box b {
 }
 .brand small { color: #c3cfdf; font-size: 0.78rem; }
 
+/* Indicador de conexion en tiempo real */
+.rt {
+  display: inline-flex; align-items: center; gap: 0.3rem; margin-left: 0.5rem;
+  padding: 0.08rem 0.55rem; border-radius: 999px; font-size: 0.7rem; font-weight: 700;
+  border: 1px solid var(--borde-fuerte); vertical-align: 0.05em;
+}
+.rt.on { color: #7ff0ac; border-color: rgba(61, 220, 132, 0.5); }
+.rt.on i { animation: pulso 2s ease-in-out infinite; }
+.rt.off { color: var(--muted); }
+@keyframes pulso { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
 .tabs { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.65rem; }
 .tab {
   background: rgba(255, 255, 255, 0.06);

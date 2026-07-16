@@ -253,14 +253,14 @@ FOR EACH ROW EXECUTE FUNCTION trg_partido_clasificacion();
 -- ============================================================================
 
 -- Tabla de posiciones ordenada con posicion (algoritmo de desempate:
--- puntos > diferencia de goles > goles a favor)
+-- puntos > diferencia de goles > goles a favor > orden alfabético)
 CREATE OR REPLACE VIEW v_clasificacion AS
 SELECT g.nombre                       AS grupo,
        s.bandera,
        s.nombre                       AS seleccion,
        c.pj, c.pg, c.pe, c.pp, c.gf, c.gc, c.dg, c.pts,
-       RANK() OVER (PARTITION BY c.id_grupo
-                    ORDER BY c.pts DESC, c.dg DESC, c.gf DESC) AS posicion
+       ROW_NUMBER() OVER (PARTITION BY c.id_grupo
+                          ORDER BY c.pts DESC, c.dg DESC, c.gf DESC, s.nombre ASC) AS posicion
   FROM clasificaciones c
   JOIN grupos      g ON g.id = c.id_grupo
   JOIN selecciones s ON s.id = c.id_seleccion;

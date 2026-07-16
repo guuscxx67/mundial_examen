@@ -1,3 +1,7 @@
+// Identificador unico de este navegador: el servidor lo devuelve en los
+// eventos de tiempo real para que cada cliente ignore sus propios cambios.
+const CLIENTE_ID = 'c-' + Math.random().toString(36).slice(2, 10);
+
 // Cliente ligero de la API REST
 const API = {
   base: '/api',
@@ -9,7 +13,7 @@ const API = {
   async send(method, path, body) {
     const r = await fetch(this.base + path, {
       method,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'X-Cliente': CLIENTE_ID },
       body: body ? JSON.stringify(body) : undefined,
     });
     const data = await r.json().catch(() => ({}));
